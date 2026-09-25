@@ -107,3 +107,25 @@ Stage Summary:
 - MIT detected by GitHub; LICENSE/CONTRIBUTING/templates/workflow all served from raw.githubusercontent
 - CI green on main
 - Not added: CODE_OF_CONDUCT (community health 71%) — offered, not requested
+
+---
+Task ID: 6
+Agent: Brokk (pi)
+Task: Add a Code of Conduct.
+
+Work Log:
+- Added CODE_OF_CONDUCT.md — Contributor Covenant v2.1, with attribution to the upstream (CC BY-SA 4.0)
+- Adapted two lines for this project: being new is not a flaw, and "read the docs" is not an answer — a link is
+- Enforcement contact is real, not fabricated: the maintainer's GitHub profile (@zerwiz) with GitHub's report-abuse form as the fallback; explicitly asks people NOT to open a public issue for conduct reports
+- Linked it from README (Contributing section) and CONTRIBUTING.md (top + Support section)
+
+Verification:
+- raw.githubusercontent CODE_OF_CONDUCT.md -> 200; YAML front matter of all three issue templates parses with the required name/about keys
+- GitHub community profile health 71% -> 85%, and it now returns code_of_conduct {key:"other", html_url: .../CODE_OF_CONDUCT.md}
+- GitHub sees .github/ISSUE_TEMPLATE identically to microsoft/vscode (bug_report.md, config.yml, feature_request.md)
+- The profile's issue_template field is null for us AND for vercel/next.js, shadcn-ui/ui and microsoft/vscode (which have working choosers) — it does not reflect the modern directory form, so it is not evidence of a gap
+- Profile updated_at is null: GitHub has not recomputed the cache yet; the last 15% is that slot
+
+Stage Summary:
+- CI green on main after the change (31s)
+- CoC detected and linked; no secret or private data added
