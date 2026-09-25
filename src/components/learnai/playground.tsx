@@ -79,7 +79,19 @@ function ChatPanel() {
   const [input, setInput] = React.useState('')
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
+  const [model, setModel] = React.useState<string>('the rail')
   const scrollRef = React.useRef<HTMLDivElement>(null)
+
+  React.useEffect(() => {
+    let alive = true
+    fetch('/api/playground/chat')
+      .then((r) => r.json())
+      .then((d) => alive && d?.model && setModel(d.model))
+      .catch(() => {})
+    return () => {
+      alive = false
+    }
+  }, [])
 
   React.useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
@@ -91,7 +103,7 @@ function ChatPanel() {
     if (!text || loading) return
     setError(null)
     const next: ChatMsg[] = [...messages, { role: 'user', content: text }]
-    setMessages(next)
+    setMessages([...next, { role: 'assistant', content: '' }])
     setInput('')
     setLoading(true)
     try {
@@ -102,11 +114,59 @@ function ChatPanel() {
           messages: next.map((m) => ({ role: m.role, content: m.content })),
         }),
       })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json()
-      setMessages((m) => [...m, { role: 'assistant', content: data.reply }])
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        throw new Error(data?.error || `HTTP ${res.status}`)
+      }
+      if (!res.body) throw new Error('the model gave no response stream')
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let acc = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+
+        const lines = buffer.split('\n')
+        buffer = lines.pop() ?? ''
+
+        for (const line of lines) {
+          const trimmed = line.trim()
+          if (!trimmed.startsWith('data:')) continue
+          const payload = trimmed.slice(5).trim()
+          if (!payload || payload === '[DONE]') continue
+
+          let evt: { delta?: string; error?: string } | null = null
+          try {
+            evt = JSON.parse(payload)
+          } catch {
+            continue
+          }
+          if (!evt) continue
+          if (evt.error) throw new Error(evt.error)
+          if (evt.delta) {
+            acc += evt.delta
+            setMessages((m) => {
+              const copy = [...m]
+              copy[copy.length - 1] = { role: 'assistant', content: acc }
+              return copy
+            })
+          }
+        }
+      }
+
+      if (!acc.trim()) throw new Error('the model returned an empty response')
     } catch (err: any) {
       setError(err?.message || 'the model call failed. try again.')
+      setMessages((m) =>
+        m.length && m[m.length - 1].role === 'assistant' && !m[m.length - 1].content
+          ? m.slice(0, -1)
+          : m,
+      )
     } finally {
       setLoading(false)
     }
@@ -127,7 +187,7 @@ function ChatPanel() {
       {/* chat column */}
       <div className="flex h-[460px] flex-col rounded-xl border border-border bg-card">
         <div className="flex items-center justify-between border-b border-border/60 px-4 py-2.5">
-          <PanelLabel icon={Bot}>live chat · glm-4.6</PanelLabel>
+          <PanelLabel icon={Bot}>live chat · {model}</PanelLabel>
           <Button variant="ghost" size="sm" onClick={reset} className="h-7 gap-1.5 font-mono text-xs">
             <RotateCcw className="size-3.5" />
             reset
@@ -165,7 +225,7 @@ function ChatPanel() {
               </div>
             </div>
           ))}
-          {loading && (
+          {loading && !messages[messages.length - 1]?.content && (
             <div className="flex gap-3">
               <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
                 <Bot className="size-4" />
@@ -274,7 +334,10 @@ function ImagePanel() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, size }),
       })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      if (!res.ok) {
+        const err = await res.json().catch(() => null)
+        throw new Error(err?.error || `HTTP ${res.status}`)
+      }
       const data = await res.json()
       setImage(data.image)
     } catch (err: any) {
@@ -409,7 +472,10 @@ function SearchPanel() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: q }),
       })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      if (!res.ok) {
+        const err = await res.json().catch(() => null)
+        throw new Error(err?.error || `HTTP ${res.status}`)
+      }
       const data = await res.json()
       setResults(data.results)
     } catch (err: any) {

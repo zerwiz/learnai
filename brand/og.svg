@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="learnai — Courses for AI Geeks and Freaks">
+  <defs>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0 H0 V44" fill="none" stroke="#33D977" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="118%" r="72%">
+      <stop offset="0%" stop-color="#33D977" stop-opacity="0.30"/>
+      <stop offset="55%" stop-color="#33D977" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#33D977" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#060907" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#060907" stop-opacity="0.85"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#060907"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- corner ticks -->
+  <path d="M40 64 V40 H64" fill="none" stroke="#33D977" stroke-opacity="0.55" stroke-width="2"/>
+  <path d="M1136 40 H1160 V64" fill="none" stroke="#33D977" stroke-opacity="0.55" stroke-width="2"/>
+  <path d="M40 566 V590 H64" fill="none" stroke="#33D977" stroke-opacity="0.55" stroke-width="2"/>
+  <path d="M1136 590 H1160 V566" fill="none" stroke="#33D977" stroke-opacity="0.55" stroke-width="2"/>
+
+  <!-- top bar -->
+  <g transform="translate(80 74)">
+    <rect width="52" height="52" rx="12" fill="#0C120F"/>
+    <rect x="0.9" y="0.9" width="50.2" height="50.2" rx="11.4" fill="none" stroke="#33D977" stroke-opacity="0.55" stroke-width="1.8"/>
+    <path d="M15.5 15.5 L27 26 L15.5 36.5" fill="none" stroke="#33D977" stroke-width="5.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="29.5" y="32" width="12.5" height="6" rx="2.2" fill="#FAB72A"/>
+  </g>
+  <text x="152" y="112" font-family="JetBrainsMono Nerd Font, JetBrainsMono NF, monospace" font-weight="700" font-size="34" fill="#E3EAE4">learn<tspan fill="#33D977">ai</tspan></text>
+  <text x="1120" y="110" text-anchor="end" font-family="JetBrainsMono Nerd Font, JetBrainsMono NF, monospace" font-size="24" fill="#919B94" letter-spacing="1">learn.zerwiz.org</text>
+
+  <!-- eyebrow -->
+  <text x="80" y="228" font-family="JetBrainsMono Nerd Font, JetBrainsMono NF, monospace" font-weight="700" font-size="22" fill="#33D977" letter-spacing="6">OPEN COURSE &#183; NO FLUFF</text>
+
+  <!-- headline -->
+  <text x="78" y="332" font-family="JetBrainsMono Nerd Font, JetBrainsMono NF, monospace" font-weight="700" font-size="86" fill="#E3EAE4" letter-spacing="-2">Courses for AI</text>
+  <text x="78" y="424" font-family="JetBrainsMono Nerd Font, JetBrainsMono NF, monospace" font-weight="700" font-size="86" fill="#E3EAE4" letter-spacing="-2">Geeks <tspan fill="#33D977">&amp;</tspan> Freaks</text>
+
+  <!-- sub -->
+  <text x="80" y="486" font-family="JetBrainsMono Nerd Font, JetBrainsMono NF, monospace" font-size="27" fill="#919B94">Git &#183; Python &#183; LLMs &#183; APIs &#183; Deployment</text>
+
+  <!-- rule -->
+  <line x1="80" y1="528" x2="1120" y2="528" stroke="#33D977" stroke-opacity="0.22" stroke-width="1.5"/>
+
+  <!-- footer row -->
+  <text x="80" y="574" font-family="JetBrainsMono Nerd Font, JetBrainsMono NF, monospace" font-weight="700" font-size="26" fill="#FAB72A"><tspan fill="#33D977">$</tspan> no fluff. just code.</text>
+  <text x="1120" y="574" text-anchor="end" font-family="JetBrainsMono Nerd Font, JetBrainsMono NF, monospace" font-size="24" fill="#919B94" letter-spacing="1">AI Geeks &amp; Freaks &#183; underground division</text>
+</svg>
