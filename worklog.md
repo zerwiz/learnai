@@ -48,3 +48,24 @@ Stage Summary:
 - Live at https://learn.zerwiz.org (200), all 5 tracks render, /api/tracks 200
 - learnai.service active+enabled; cloudflared-aigeeksandfreaks.service active
 - Deployment recorded in DEPLOY.md
+
+---
+Task ID: 3
+Agent: Brokk (pi)
+Task: Brand metadata, OG plate, favicon; wire the live playground to the local model rail.
+
+Work Log:
+- Forged a new mark (brand/icon.svg): terminal prompt `>_` — emerald chevron + amber cursor on a dark rounded square; replaced the inherited generic "Z" logo
+- Added brand/og.svg (1200x630) and brand/icon-square.svg (full-bleed, for apple-touch)
+- Added scripts/generate-brand-assets.sh -> public/{favicon.ico,icon.svg,icon-192.png,icon-512.png,apple-icon.png,og.png} via rsvg-convert + imagemagick
+- Rewrote src/app/layout.tsx metadata: metadataBase, canonical, OG (url/site/locale/image 1200x630), twitter card, icons matrix, robots/googleBot, viewport themeColor #060907, JSON-LD WebSite
+- Added src/app/{manifest.ts,sitemap.ts,robots.ts}; removed public/robots.txt
+- Rewired /api/playground/chat from the dead z-ai SDK to the llama-swap rail (OpenAI-compatible), with SSE streaming pass-through; model from env (default qwen3.6-35b-a3b@q4_k_xl-mtp)
+- ChatPanel now consumes SSE deltas and shows the real model name from GET /api/playground/chat
+- Rewrote /api/playground/image (OpenAI-compatible images) and /api/playground/search (searxng|brave|tavily|custom) as env-configured with honest 503s; UI surfaces the message
+- Untracked db/custom.db (sqlite binary) and added .env.example
+
+Stage Summary:
+- Live at https://learn.zerwiz.org; og.png/favicon/icons/manifest/robots/sitemap all 200
+- Chat streams end-to-end: public URL -> tunnel -> tailnet rail -> qwen3.6-35b-a3b@q4_k_xl-mtp
+- Image + search await a provider decision (vault OpenAI key rejected; no local SearXNG)
