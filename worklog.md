@@ -69,3 +69,21 @@ Stage Summary:
 - Live at https://learn.zerwiz.org; og.png/favicon/icons/manifest/robots/sitemap all 200
 - Chat streams end-to-end: public URL -> tunnel -> tailnet rail -> qwen3.6-35b-a3b@q4_k_xl-mtp
 - Image + search await a provider decision (vault OpenAI key rejected; no local SearXNG)
+
+---
+Task ID: 4
+Agent: Brokk (pi)
+Task: Point the support CTAs at the tip jar (https://ko-fi.com/zerwiz) and make the dead footer links live.
+
+Work Log:
+- Added src/lib/site.ts as the one source of outbound links (SITE_URL, REPO_URL, DISCUSSIONS_URL, ISSUES_URL, SUPPORT_URL from NEXT_PUBLIC_SUPPORT_URL with the ko-fi default)
+- community.tsx: "buy us a coffee" was a dead Button — wrapped in asChild <a> to SUPPORT_URL; discussions link now from site.ts
+- site-footer.tsx: connect column now links github repo, discussions, contribute a track (issues/new), report a bug (issues/new), and buy us a coffee (ko-fi) — previously the last two were inert text
+- site-header.tsx: repo link from site.ts
+- layout.tsx / robots.ts / sitemap.ts: took SITE_URL from site.ts (removed three duplicated consts)
+- Documented NEXT_PUBLIC_SUPPORT_URL in .env.example
+
+Stage Summary:
+- Two ko-fi links live on https://learn.zerwiz.org (community button + footer); issues/discussions links live
+- ko-fi.com/zerwiz verified ("Support zerwiz"); bare curl 403s on Cloudflare bot protection, browsers load it fine
+- lint + build clean; deployed to zerwizserver, learnai.service restarted
