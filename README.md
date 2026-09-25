@@ -1,23 +1,26 @@
-# hejhopp
+# LearnAI — Courses for AI Geeks & Freaks
 
-A testing repo for learning AI.
+A hands-on course for new people getting into coding with AI. No fluff, no lectures. Just code, models, and curiosity.
 
 ## Purpose
 
-This repository is a sandbox for experimenting with AI models, benchmarking, and building practical knowledge. It's meant to be a place to learn by doing.
+We teach beginners how to code with AI — from zero to building real things. Every lesson has code you can run, break, and improve.
 
 ## What's Inside
 
-- Model testing scripts and configs
-- Benchmarking results
-- Learning notes and experiments
+- **Track 0:** Your Machine — Omarchy, Whisper & Piper (install your OS + voice)
+- **Track 1:** Git & GitHub — the foundation
+- **Track 2:** Python for AI — the language
+- **Track 3:** Talking to Models — the API
+- **Track 4:** Building with AI — the projects
+- **Track 5:** Going Deeper — the rabbit hole
 
 ## Getting Started
 
 1. Clone the repo
-2. Check the [planning doc](PLANNING.md) for current goals
-3. Start experimenting
+2. Check the [planning doc](PLANNING.md) for the full course outline
+3. Pick a track and start coding
 
 ## Hosting
 
-The project home page is live at [learn.zerwiz.org](https://learn.zerwiz.org).
+The course site is live at [learn.zerwiz.org](https://learn.zerwiz.org).
