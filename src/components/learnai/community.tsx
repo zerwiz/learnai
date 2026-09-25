@@ -4,6 +4,7 @@ import { Github, MessagesSquare, Heart, Coffee, Terminal, Zap } from 'lucide-rea
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CodeBlock } from './code-block'
+import { DISCUSSIONS_URL, SUPPORT_URL } from '@/lib/site'
 
 const principles = [
   {
@@ -79,14 +80,16 @@ export function Community() {
           </ul>
           <div className="flex flex-wrap gap-2">
             <Button size="sm" asChild>
-              <a href="https://github.com/zerwiz/learnai/discussions" target="_blank" rel="noreferrer">
+              <a href={DISCUSSIONS_URL} target="_blank" rel="noreferrer">
                 <Github className="size-4" />
                 join discussions
               </a>
             </Button>
-            <Button size="sm" variant="outline">
-              <Coffee className="size-4" />
-              buy us a coffee
+            <Button size="sm" variant="outline" asChild>
+              <a href={SUPPORT_URL} target="_blank" rel="noreferrer">
+                <Coffee className="size-4" />
+                buy us a coffee
+              </a>
             </Button>
           </div>
         </Card>

@@ -5,6 +5,7 @@ import { Github, Moon, Sun, Terminal } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { REPO_URL } from '@/lib/site'
 
 type View = 'home' | 'track' | 'lesson' | 'playground' | 'community'
 
@@ -72,7 +73,7 @@ export function SiteHeader({ view, onNavigate }: SiteHeaderProps) {
             className="hidden sm:inline-flex"
           >
             <a
-              href="https://github.com/zerwiz/learnai"
+              href={REPO_URL}
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub repo"

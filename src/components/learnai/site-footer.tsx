@@ -1,6 +1,12 @@
 'use client'
 
-import { Github, Heart, Terminal } from 'lucide-react'
+import { Coffee, Github, Heart, Terminal } from 'lucide-react'
+import {
+  DISCUSSIONS_URL,
+  ISSUES_URL,
+  REPO_URL,
+  SUPPORT_URL,
+} from '@/lib/site'
 
 export function SiteFooter() {
   return (
@@ -49,7 +55,7 @@ export function SiteFooter() {
             <ul className="mt-3 space-y-2 text-sm">
               <li>
                 <a
-                  href="https://github.com/zerwiz/learnai"
+                  href={REPO_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
@@ -59,7 +65,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="https://github.com/zerwiz/learnai/discussions"
+                  href={DISCUSSIONS_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="text-muted-foreground transition-colors hover:text-foreground"
@@ -67,11 +73,35 @@ export function SiteFooter() {
                   discussions
                 </a>
               </li>
-              <li className="text-muted-foreground transition-colors hover:text-foreground">
-                contribute a track
+              <li>
+                <a
+                  href={ISSUES_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  contribute a track
+                </a>
               </li>
-              <li className="text-muted-foreground transition-colors hover:text-foreground">
-                report a bug
+              <li>
+                <a
+                  href={ISSUES_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  report a bug
+                </a>
+              </li>
+              <li>
+                <a
+                  href={SUPPORT_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <Coffee className="size-3.5" /> buy us a coffee
+                </a>
               </li>
             </ul>
           </div>
@@ -83,8 +113,7 @@ export function SiteFooter() {
           </p>
           <p className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
             made with <Heart className="size-3.5 fill-primary text-primary" /> &amp; curiosity at 2&nbsp;am
-          </p>
-        </div>
+          </p>        </div>
       </div>
     </footer>
   )
