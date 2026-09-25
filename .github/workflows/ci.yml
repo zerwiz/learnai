@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: file:./db/ci.db
+      NEXT_PUBLIC_SITE_URL: https://learn.zerwiz.org
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Prisma generate
+        run: bun run db:generate
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Build
+        run: bun run build

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ask a question
+    url: https://github.com/zerwiz/learnai/discussions
+    about: Not a bug and not a proposal? Start a discussion.
+  - name: Buy us a coffee
+    url: https://ko-fi.com/zerwiz
+    about: The course stays free — support the work.
