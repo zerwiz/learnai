@@ -9,6 +9,10 @@ There are no gatekeepers here, but there is one rule worth stating up front:
 > should say so out loud rather than return a fake result. The playground follows
 > this, and so should your PR.
 
+Everyone here is covered by the [Code of Conduct](./CODE_OF_CONDUCT.md). The
+short version: be kind, assume good faith, and remember that being new is not a
+flaw. Reports are handled privately — see the enforcement section for how.
+
 ---
 
 ## Ways to contribute
@@ -158,6 +162,8 @@ it's visual. A screenshot of the browser console is worth ten sentences.
 
 The course is free and stays free. If it helped, buy us a coffee:
 **<https://ko-fi.com/zerwiz>**
+
+This project follows the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## License
 

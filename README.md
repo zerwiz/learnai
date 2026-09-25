@@ -189,6 +189,9 @@ how to add a lesson. Start with a
 [good first issue](https://github.com/zerwiz/learnai/issues) or open a
 [lesson idea](https://github.com/zerwiz/learnai/issues/new/choose).
 
+This project is governed by a [Code of Conduct](./CODE_OF_CONDUCT.md). By taking
+part, you agree to uphold it.
+
 ---
 
 ## Support
