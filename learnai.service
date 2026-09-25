@@ -1,0 +1,18 @@
+[Unit]
+Description=LearnAI — Courses for AI Geeks & Freaks
+After=network.target
+
+[Service]
+Type=simple
+User=zerwizserver
+WorkingDirectory=/home/zerwizserver/learnai
+EnvironmentFile=/home/zerwizserver/learnai/.env
+ExecStart=/home/zerwizserver/.bun/bin/bun /home/zerwizserver/learnai/.next/standalone/server.js
+Restart=always
+RestartSec=5
+Environment=PORT=3742
+Environment=HOSTNAME=127.0.0.1
+Environment=PATH=/home/zerwizserver/.bun/bin:/home/zerwizserver/.nvm/versions/node/v22.19.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target

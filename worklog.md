@@ -29,3 +29,22 @@ Stage Summary:
 - Live AI playground wired to real z-ai-web-dev-sdk backends (chat/image/search)
 - Production-ready, responsive, dark-default hacker aesthetic
 - All core flows browser-verified; lint clean
+
+---
+Task ID: 2
+Agent: Brokk (pi)
+Task: Host LearnAI on zerwizserver behind Cloudflare on an uncommon port.
+
+Work Log:
+- Committed the previously-untracked full app (104 files) and pushed origin/main
+- Cloned to zerwizserver, installed deps via bun, generated Prisma client, built standalone
+- Chose port 3742 (loopback only; uncommon, clear of existing 3800/3900/3910/4823/8038/8111/8112)
+- Seated learnai.service (systemd, enabled at boot), DATABASE_URL -> ~/learnai/db/custom.db
+- Added learn.zerwiz.org ingress to the existing aigeeksandfreaks tunnel config.yml
+- Routed DNS: cloudflared tunnel route dns aigeeksandfreaks learn.zerwiz.org
+- Restarted cloudflared-aigeeksandfreaks.service
+
+Stage Summary:
+- Live at https://learn.zerwiz.org (200), all 5 tracks render, /api/tracks 200
+- learnai.service active+enabled; cloudflared-aigeeksandfreaks.service active
+- Deployment recorded in DEPLOY.md
