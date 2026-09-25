@@ -87,3 +87,23 @@ Stage Summary:
 - Two ko-fi links live on https://learn.zerwiz.org (community button + footer); issues/discussions links live
 - ko-fi.com/zerwiz verified ("Support zerwiz"); bare curl 403s on Cloudflare bot protection, browsers load it fine
 - lint + build clean; deployed to zerwizserver, learnai.service restarted
+
+---
+Task ID: 5
+Agent: Brokk (pi)
+Task: A real README, MIT license, and a contribution surface on GitHub.
+
+Work Log:
+- Rewrote README.md against the actual code: 5 tracks / 24 lessons (the old one claimed a 6-track list with a Track 0 that is not in course-data.ts), the live playground and its env vars, stack, quick start, project layout, brand-asset regen, deploy pointer, support, license
+- Added LICENSE (MIT, Copyright (c) 2026 zerwiz) — GitHub reports spdx_id MIT
+- Added CONTRIBUTING.md: dev setup, the fork→branch→PR loop, code style, a worked "add a lesson" section with the real LessonBlock shape, playground-backend rules, the no-mock law
+- Added .github/ISSUE_TEMPLATE/{config.yml,bug_report.md,lesson_idea.md,feature_request.md} — the footer links to /issues/new/choose, which showed a blank page without a chooser
+- Added .github/pull_request_template.md with the checklist that mirrors the house rules
+- Added .github/workflows/ci.yml (bun install --frozen-lockfile, prisma generate, lint, build); first run on main: success in 29s
+- package.json: name learnai, description, license, author, homepage, repository, bugs, keywords
+- GitHub repo: homepage https://learn.zerwiz.org, 8 topics
+
+Stage Summary:
+- MIT detected by GitHub; LICENSE/CONTRIBUTING/templates/workflow all served from raw.githubusercontent
+- CI green on main
+- Not added: CODE_OF_CONDUCT (community health 71%) — offered, not requested
