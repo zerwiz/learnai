@@ -28,6 +28,8 @@ import {
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
+import { getLesson } from '@/lib/course-data'
+import type { ChatContext } from '@/lib/chat-context'
 
 /* ----------------------------- shared bits ----------------------------- */
 
@@ -68,7 +70,35 @@ function CurlHint({ label, code }: { label: string; code: string }) {
 
 type ChatMsg = { role: 'user' | 'assistant'; content: string }
 
-function ChatPanel() {
+const DEFAULT_ASK = [
+  'explain git rebase in 2 sentences',
+  'write a python fibonacci function',
+  'what is an OpenAI-compatible API?',
+  'what does MCP stand for in AI?',
+]
+
+/** Derive suggested questions from the reader's own lesson (plan phase 3). */
+function asksForLesson(trackId?: string, lessonId?: string): string[] {
+  if (!trackId || !lessonId) return DEFAULT_ASK
+  const found = getLesson(trackId, lessonId)
+  if (!found) return DEFAULT_ASK
+
+  const picks: string[] = []
+  for (const b of found.lesson.blocks) {
+    if (picks.length >= 3) break
+    if (b.type === 'try' || b.type === 'tip') picks.push(b.text)
+    else if (b.type === 'h') picks.push(`what is "${b.text}"?`)
+  }
+
+  const cleaned = picks
+    .map((s) => s.replace(/`/g, '').trim())
+    .filter((s) => s.length > 12)
+    .map((s) => (s.length > 72 ? `${s.slice(0, 70).trimEnd()}…` : s))
+
+  return cleaned.length >= 2 ? cleaned : DEFAULT_ASK
+}
+
+function ChatPanel({ context }: { context?: ChatContext }) {
   const [messages, setMessages] = React.useState<ChatMsg[]>([
     {
       role: 'assistant',
@@ -112,6 +142,7 @@ function ChatPanel() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: next.map((m) => ({ role: m.role, content: m.content })),
+          context,
         }),
       })
 
@@ -261,8 +292,20 @@ function ChatPanel() {
         <div className="rounded-xl border border-border bg-card p-4">
           <PanelLabel icon={Zap}>how this works</PanelLabel>
           <p className="mt-2 text-sm text-muted-foreground">
-            Your message goes to a Next.js API route, which calls the model server-side
-            and streams the reply back. The API key never touches your browser.
+            {context?.lessonTitle ? (
+              <>
+                Your message goes to a Next.js API route, which calls the model
+                server-side and streams the reply back. The route knows{' '}
+                <span className="text-foreground">{context.lessonTitle}</span> and reads
+                the lesson before answering. The API key never touches your browser.
+              </>
+            ) : (
+              <>
+                Your message goes to a Next.js API route, which calls the model
+                server-side and streams the reply back. The API key never touches your
+                browser.
+              </>
+            )}
           </p>
           <CurlHint
             label="curl"
@@ -270,19 +313,15 @@ function ChatPanel() {
 {
   "messages": [
     {"role":"user","content":"${input || 'hi'}"}
-  ]
+  ]${context?.lessonId ? `,
+  "context": {"trackId":"${context.trackId}","lessonId":"${context.lessonId}"}` : ''}
 }`}
           />
         </div>
         <div className="rounded-xl border border-border bg-card p-4">
           <PanelLabel icon={Terminal}>try asking</PanelLabel>
           <ul className="mt-2 space-y-1.5 text-sm">
-            {[
-              'explain git rebase in 2 sentences',
-              'write a python fibonacci function',
-              'what is an OpenAI-compatible API?',
-              'what does MCP stand for in AI?',
-            ].map((s) => (
+            {asksForLesson(context?.trackId, context?.lessonId).map((s) => (
               <li key={s}>
                 <button
                   type="button"
@@ -609,7 +648,12 @@ function SearchPanel() {
 
 /* ----------------------------- PLAYGROUND ----------------------------- */
 
-export function Playground() {
+export function Playground({ context }: { context?: ChatContext }) {
+  // If a provider is ever configured, the real panel lights up by itself —
+  // no code change, no redeploy of the client.
+  const imageReady = useConfigured('/api/playground/image')
+  const searchReady = useConfigured('/api/playground/search')
+
   return (
     <section id="playground" className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
       <div className="text-center">
@@ -621,7 +665,7 @@ export function Playground() {
           Try it now — no signup.
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-          Three real AI capabilities, running on real models behind real APIs. This is
+          Real AI capabilities, running on real models behind real APIs. This is
           what Track 03 teaches you to build. Poke it. Break it. Learn from it.
         </p>
       </div>
@@ -636,23 +680,115 @@ export function Playground() {
             <TabsTrigger value="image" className="gap-1.5 font-mono text-xs">
               <ImageIcon className="size-3.5" />
               image
+              {imageReady === false && <SoonTag />}
             </TabsTrigger>
             <TabsTrigger value="search" className="gap-1.5 font-mono text-xs">
               <Search className="size-3.5" />
               search
+              {searchReady === false && <SoonTag />}
+            </TabsTrigger>
+            <TabsTrigger value="video" className="gap-1.5 font-mono text-xs" disabled>
+              <Sparkles className="size-3.5" />
+              video
+              <SoonTag />
             </TabsTrigger>
           </TabsList>
           <TabsContent value="chat" className="mt-4">
-            <ChatPanel />
+            <ChatPanel context={context} />
           </TabsContent>
           <TabsContent value="image" className="mt-4">
-            <ImagePanel />
+            {imageReady ? (
+              <ImagePanel />
+            ) : (
+              <ComingSoonPanel
+                icon={ImageIcon}
+                title="image generation is coming soon"
+                body="This tab needs an image provider wired to the server. Nothing is mocked here — when it lights up, it will be a real model behind a real API, exactly like chat."
+                env="IMAGE_API_KEY"
+              />
+            )}
           </TabsContent>
           <TabsContent value="search" className="mt-4">
-            <SearchPanel />
+            {searchReady ? (
+              <SearchPanel />
+            ) : (
+              <ComingSoonPanel
+                icon={Search}
+                title="web search is coming soon"
+                body="Search needs a backend — SearXNG, Brave, or Tavily. We would rather show you nothing than a fake result, so the tab stays dark until it is real."
+                env="SEARCH_PROVIDER"
+              />
+            )}
+          </TabsContent>
+          <TabsContent value="video" className="mt-4">
+            <ComingSoonPanel
+              icon={Sparkles}
+              title="video generation is coming soon"
+              body="Not built yet. When it is, it will run the same way chat does: a Next.js route calling a real model, streaming, key never in the browser."
+            />
           </TabsContent>
         </Tabs>
       </div>
     </section>
+  )
+}
+
+/* --------------------------- COMING SOON --------------------------- */
+
+function SoonTag() {
+  return (
+    <span className="rounded bg-secondary px-1 py-px text-[9px] uppercase tracking-wider text-muted-foreground">
+      soon
+    </span>
+  )
+}
+
+/** Ask a playground route whether it has a backend. null = still checking. */
+function useConfigured(url: string): boolean | null {
+  const [configured, setConfigured] = React.useState<boolean | null>(null)
+
+  React.useEffect(() => {
+    let alive = true
+    fetch(url)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!alive) return
+        setConfigured(typeof d?.configured === 'boolean' ? d.configured : false)
+      })
+      .catch(() => alive && setConfigured(false))
+    return () => {
+      alive = false
+    }
+  }, [url])
+
+  return configured
+}
+
+function ComingSoonPanel({
+  icon: Icon,
+  title,
+  body,
+  env,
+}: {
+  icon: any
+  title: string
+  body: string
+  env?: string
+}) {
+  return (
+    <div className="rounded-xl border border-dashed border-border bg-card/40 px-6 py-14 text-center">
+      <div className="mx-auto flex size-11 items-center justify-center rounded-xl bg-primary/15 text-primary">
+        <Icon className="size-5" />
+      </div>
+      <h3 className="mt-4 font-mono text-sm font-bold uppercase tracking-wider text-foreground">
+        {title}
+      </h3>
+      <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{body}</p>
+      {env ? (
+        <p className="mt-4 font-mono text-[11px] uppercase tracking-wider text-muted-foreground/70">
+          waiting on <span className="text-primary">{env}</span>
+        </p>
+      ) : null}
+    </div>
   )
 }

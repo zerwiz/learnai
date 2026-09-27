@@ -10,6 +10,7 @@ import { Playground } from '@/components/learnai/playground'
 import { Community } from '@/components/learnai/community'
 import { SiteFooter } from '@/components/learnai/site-footer'
 import { getLesson, type Track } from '@/lib/course-data'
+import type { ChatContext } from '@/lib/chat-context'
 
 type View = 'home' | 'track' | 'lesson' | 'playground' | 'community'
 
@@ -56,6 +57,17 @@ export default function Home() {
     ? activeTrack.lessons.findIndex((l) => l.id === activeLessonId)
     : -1
 
+  // The reader's place in the course. Facts only — the server composes the
+  // system prompt from course-data.ts and never trusts these strings.
+  const chatContext: ChatContext = {
+    view,
+    trackId: activeTrack?.id,
+    trackTitle: activeTrack?.title,
+    lessonId: activeLessonId ?? undefined,
+    lessonTitle: lessonData?.lesson.title,
+    completedLessonIds: Array.from(completedLessons),
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader view={view} onNavigate={navigate} />
@@ -100,7 +112,7 @@ export default function Home() {
           />
         )}
 
-        {view === 'playground' && <Playground />}
+        {view === 'playground' && <Playground context={chatContext} />}
 
         {view === 'community' && <Community />}
       </main>

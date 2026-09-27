@@ -32,6 +32,7 @@ DATABASE_URL=file:/home/zerwizserver/learnai/db/custom.db
 LLM_BASE_URL=http://heimdall.tailefab81.ts.net:8080/v1
 LLM_API_KEY=<LLAMA_SWAP_API_KEY from the vault>
 LLM_MODEL=qwen3.6-35b-a3b@q4_k_xl-mtp
+CHAT_GROUNDING=lesson
 ```
 
 ## Live playground backends
@@ -48,7 +49,11 @@ The rail is reached over the **tailnet** (`heimdall.tailefab81.ts.net:8080`), so
 tunnel keeps working on and off LAN. The rail runs `--models-max 1`: the first
 request after idle pays the model-load cost.
 
-Image and search have **no backend today** — the vault's OpenAI key is rejected
+`CHAT_GROUNDING` is the kill-switch for course grounding: `off` (persona only),
+`track` (default — track + progress), or `lesson` (adds a bounded 1200-char
+excerpt of the reader's own lesson). Dialled without a redeploy.
+
+Image, search and video have **no backend today** — the vault's OpenAI key is rejected
 and there is no local SearXNG. Both return an honest `503` until configured;
 the UI shows the message rather than pretending.
 
