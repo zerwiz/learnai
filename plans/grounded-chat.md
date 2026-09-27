@@ -235,3 +235,28 @@ Concretely, that means:
 
 If a phase cannot be justified as a learner's experience, cut it. The operator
 can always ask for more; the learner only ever gets what we choose to give them.
+
+---
+
+## The community these serve
+
+The learners in this plan are **our community**, not an abstract audience:
+
+**<https://discord.gg/HtKyx8j4Cs>**
+
+That is the door. It is also where the real feedback on whether any of this
+works comes from — a beginner's confusion in a lesson thread is worth more than
+any dashboard.
+
+Two consequences for this plan:
+
+- **Build toward the people who are actually in the Discord.** If grounding the
+  chat helps them, it ships. If it only makes the course site look more
+  finished, it does not.
+- **The community gets told when it changes.** A reader should never discover
+  that "the bot knows what lesson I'm on" from a changelog they were not shown.
+  Announce it where they already are.
+
+GitHub Discussions remains for the durable, searchable record — code, lessons,
+and decisions — and the Discord is where the conversation happens. Both doors
+stay open; they are not the same room.

@@ -1,7 +1,8 @@
 'use client'
 
-import { Coffee, Github, Heart, Terminal } from 'lucide-react'
+import { Coffee, Github, Heart, MessageCircle, Terminal } from 'lucide-react'
 import {
+  COMMUNITY_URL,
   DISCUSSIONS_URL,
   ISSUES_URL,
   REPO_URL,
@@ -53,6 +54,16 @@ export function SiteFooter() {
               connect
             </h4>
             <ul className="mt-3 space-y-2 text-sm">
+              <li>
+                <a
+                  href={COMMUNITY_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <MessageCircle className="size-3.5" /> discord community
+                </a>
+              </li>
               <li>
                 <a
                   href={REPO_URL}

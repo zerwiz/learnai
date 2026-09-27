@@ -4,7 +4,7 @@ import { Github, MessagesSquare, Heart, Coffee, Terminal, Zap } from 'lucide-rea
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CodeBlock } from './code-block'
-import { DISCUSSIONS_URL, SUPPORT_URL } from '@/lib/site'
+import { COMMUNITY_URL, DISCUSSIONS_URL, SUPPORT_URL } from '@/lib/site'
 
 const principles = [
   {
@@ -80,9 +80,15 @@ export function Community() {
           </ul>
           <div className="flex flex-wrap gap-2">
             <Button size="sm" asChild>
+              <a href={COMMUNITY_URL} target="_blank" rel="noreferrer">
+                <MessagesSquare className="size-4" />
+                join the discord
+              </a>
+            </Button>
+            <Button size="sm" variant="outline" asChild>
               <a href={DISCUSSIONS_URL} target="_blank" rel="noreferrer">
                 <Github className="size-4" />
-                join discussions
+                github discussions
               </a>
             </Button>
             <Button size="sm" variant="outline" asChild>

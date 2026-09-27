@@ -11,6 +11,7 @@ real things, break them, fix them, and learn by doing.
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-33D977?style=flat-square)](./CONTRIBUTING.md)
 
 - **Live site:** <https://learn.zerwiz.org>
+- **Community:** <https://discord.gg/HtKyx8j4Cs> — the AI geeks & freaks Discord
 - **Part of:** [AI Geeks & Freaks](https://aigeeksnfreaks.zerwiz.org)
 - **Support:** [buy us a coffee](https://ko-fi.com/zerwiz)
 
