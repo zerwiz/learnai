@@ -5,6 +5,8 @@ export const dynamic = 'force-static'
 
 export async function GET() {
   return NextResponse.json({
+    contractVersion: 2,
+    generatedAt: new Date().toISOString(),
     stats: trackStats,
     tracks: tracks.map((t) => ({
       id: t.id,
