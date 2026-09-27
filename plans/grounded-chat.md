@@ -195,3 +195,43 @@ to turn it off fast.
 already-done work it builds on: the chat route now targets the llama-swap rail
 (`qwen3.6-35b-a3b@q4_k_xl-mtp`) and streams SSE, the SDK is gone, and
 `GET /api/playground/chat` reports the live model for the UI label.
+
+---
+
+## Who this is for
+
+**This plan is for the users of the site — the learners. It is not for the
+Allfather.**
+
+Read that as a design constraint, not a courtesy note.
+
+Every decision below is filtered through one question: **does this help someone
+who came here to learn?** If a change serves the operator, the site operator, or
+the project's mechanics rather than the person on lesson 12, it does not belong
+in this plan.
+
+Concretely, that means:
+
+- **No feature that exists because it is impressive to build.** Grounding the
+  chat in the lesson matters because a beginner reading "Streaming & Error
+  Handling" gets an answer that fits *their* lesson — not because a grounded
+  assistant is a clever thing to attach to a course site.
+- **No instrumentation on the reader.** The context is lesson ids and progress,
+  nothing more. The reader's `completedLessons` is a fact about their learning
+  path, not a tracking surface. It stays in the request to our own route and
+  goes nowhere else.
+- **No dark patterns, no nagging, no growth loops.** No "you're behind — 3
+  lessons left!", no streak pressure, no modal asking for an account mid-lesson.
+  A beginner who is stuck on rebase is the only thing this is for.
+- **Cost falls on us, not on the reader.** Free, no signup, no paywall. The tip
+  jar stays a tip jar — never a gate on a lesson.
+- **Errors tell the truth.** Already the law on this site, and it matters most
+  here: if the chat is not grounded or the rail is down, the reader is told. Not
+  a fake answer, not a fake citation, not a cheerful nothing-burger.
+- **The rail is self-hosted, which is what makes sending context acceptable at
+  all.** The reader's context goes to a machine we run, not a third party. Keep
+  it that way — routing the reader's lesson context to a hosted API would undo
+  the reason this plan is safe.
+
+If a phase cannot be justified as a learner's experience, cut it. The operator
+can always ask for more; the learner only ever gets what we choose to give them.
