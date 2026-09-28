@@ -18,7 +18,7 @@
 #
 # Usage:  bin/deploy.sh            plan only (default, changes nothing)
 #         bin/deploy.sh --yes      do it
-set -euo pipefail
+set -eo pipefail
 
 # ---- per-repo config -------------------------------------------------------
 REPO_NAME="learnai"
@@ -93,10 +93,8 @@ ssh "$REMOTE" "set -e
     # see - and we spent an hour wondering why a shipped fix was still not live.
     # So: .next itself becomes the symlink. Rollback is one ln -sfn back to the
     # previous release, and the old tree is never overwritten, only unlinked.
-    PREV=""
     if [ -e .next ] && [ ! -L .next ]; then
-      PREV=$(mktemp -d)/prev-next
-      mv .next "$PREV"
+      mv .next "$(mktemp -d)/prev-next"
     fi
     ln -sfn $RELEASE/.next .next
     echo "  .next -> $RELEASE/.next"
