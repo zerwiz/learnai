@@ -69,3 +69,57 @@ Netlify.** Never add a Netlify deploy step. The deploy is
   not invent a gate.
 - `trackStats` in the API is `{...trackStats, hours: trackStatsHours}` —
   `minutes` remains in the payload for consumers that want the exact sum.
+
+---
+
+## 2026-09-28 — where this stands, and what the site promises
+
+**Deployed and verified.** `https://learn.zerwiz.org/api/tracks` answers
+`contractVersion: 3`, 12 tracks · 78 lessons · 32h · 17 free, in teaching order
+1 → 12.
+
+### The promises this site makes, and the laws behind them
+
+1. **Free, and it stays free.** Track 01 in full, plus one free lesson from every
+   other track. Nothing here is ever paywalled. *A locked thing on this site is a
+   bug, not a business decision.*
+2. **Every course is a course that exists.** 12 real tracks, ported from
+   `svartalfaheim/whynotproductions/workspace/aigf/courses/`, lesson by lesson,
+   with nothing invented. Where a lesson had no runnable code, it got no code
+   block.
+3. **The teaching order is the number.** `orderedTracks` is the single ordered
+   list — the grid, `/api/tracks` and the footer all read it. The raw array is
+   append-order, which is right for git and wrong for a reader.
+4. **A number shown here is a count we can query.** `trackStats.minutes` is the
+   exact sum; **`trackStatsHours` is the only honest public figure** and it is
+   what the hero shows. Never publish `minutes` labelled as hours — that was a
+   real bug, fixed 2026-09-28.
+5. **Any change to the payload bumps `contractVersion`.** Consumers refuse a
+   shape they do not understand, and they are right to.
+
+### The two bridges out of here
+
+- **The community** — `$49 per person, per month`, a live cohort, the room, the
+  self-paced path. `aigeeksnfreaks.zerwiz.org`. The free path stays free; what
+  costs money is the room.
+- **Ymir** — the agent OS these lessons were written and verified on. Free, open,
+  and the reason the course material can honestly claim to come from a real
+  machine.
+
+### Housekeeping that bit us
+
+- `.yggdrasil/` is untracked. An embedded worktree was swept in by `git add -A`,
+  which is the exact wound `CRS-200` teaches. **Stage named files, never `-A`.**
+- ESLint ignores the worktree pool. It was linting a nested copy of the repo and
+  reporting failures that were not ours.
+
+### Deploying
+
+```
+bin/deploy.sh            # plan only
+bin/deploy.sh --yes      # ship
+```
+
+Never builds over the tree a running process serves from — that is what cost
+this site its CSS on 2026-09-28. Releases are timestamped directories reached
+through a symlink; the restart is the only privileged step and it is last.
