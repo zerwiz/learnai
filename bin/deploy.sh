@@ -81,7 +81,7 @@ ssh "$REMOTE" "set -e
     cd $REMOTE_DIR
     git fetch --quiet origin && git reset --hard origin/\$(git rev-parse --abbrev-ref HEAD)
     /home/zerwizserver/.bun/bin/bun install >/dev/null
-    mkdir -p $RELEASE_DIR
+    mkdir -p $REMOTE_RELEASES
     rm -rf $RELEASE && mkdir -p $RELEASE
     cp -r .next $RELEASE/.next
     cp -r public $RELEASE/public 2>/dev/null || true
