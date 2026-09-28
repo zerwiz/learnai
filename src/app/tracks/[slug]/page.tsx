@@ -100,7 +100,7 @@ export default async function TrackPage({ params }: { params: Promise<{ slug: st
         {gated > 0 ? (
           <div className="mt-8 rounded-lg border border-border bg-muted/20 p-5">
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              // the rest of this track
+              {"// the rest of this track"}
             </p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               {gated} of {track.lessons.length} lessons are in the community — the
