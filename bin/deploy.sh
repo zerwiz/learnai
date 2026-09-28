@@ -87,7 +87,7 @@ ssh "$REMOTE" "set -e
     cd $REMOTE_DIR
     git fetch --quiet origin && git reset --hard origin/\$(git rev-parse --abbrev-ref HEAD)
     /home/zerwizserver/.bun/bin/bun install >/dev/null
-    if [ -f prisma/schema.prisma ]; then
+    if [ -d prisma/migrations ]; then
       echo "  migrating"
       npx prisma generate >/dev/null
       npx prisma migrate deploy
