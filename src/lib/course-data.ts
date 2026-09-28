@@ -10,11 +10,17 @@ export type LessonBlock =
   | { type: 'tip'; text: string }
   | { type: 'warn'; text: string }
   | { type: 'try'; text: string }
+  | { type: 'table'; header: string[]; rows: string[][]; caption?: string }
   | { type: 'warn'; text: string }
   | { type: 'try'; text: string }
+  | { type: 'table'; header: string[]; rows: string[][]; caption?: string }
+
+export type Access = 'free' | 'member'
 
 export type Lesson = {
   id: string
+  /** 'free' is readable by anyone forever. 'member' is the paid ground. */
+  access: Access
   title: string
   blurb: string
   duration: string
@@ -24,6 +30,8 @@ export type Lesson = {
 
 export type Track = {
   id: string
+  /** 'free' = this whole track is the minimal public ground. */
+  access: Access
   number: number
   slug: string
   title: string
@@ -39,7 +47,8 @@ export type Track = {
 export const tracks: Track[] = [
   {
     id: 't1',
-    number: 1,
+    access: 'member',
+    number: 8,
     slug: 'git-github',
     title: 'Git & GitHub',
     tagline: 'The Foundation',
@@ -50,6 +59,7 @@ export const tracks: Track[] = [
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'Making Your First Repo',
         blurb: 'Create a repo, clone it, push your first commit.',
         duration: '15 min',
@@ -79,6 +89,7 @@ git push -u origin main` },
       },
       {
         id: 'l2',
+        access: 'member',
         title: 'Cloning: SSH vs HTTPS',
         blurb: 'Two ways to grab code. SSH wins long-term.',
         duration: '10 min',
@@ -94,6 +105,7 @@ git push -u origin main` },
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'Forking & Upstream',
         blurb: 'Your copy vs the original. Keep them straight.',
         duration: '12 min',
@@ -114,6 +126,7 @@ git remote -v
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Syncing a Fork',
         blurb: 'Keep your fork fresh with the original.',
         duration: '10 min',
@@ -137,6 +150,7 @@ git push origin main` },
       },
       {
         id: 'l5',
+        access: 'member',
         title: 'Branching & Pull Requests',
         blurb: 'Never push to main. Branch first, always.',
         duration: '14 min',
@@ -162,6 +176,7 @@ gh pr create --title "Add learning module" \\
       },
       {
         id: 'l6',
+        access: 'member',
         title: 'Small, Focused PRs',
         blurb: 'One thing per PR. Reviewers (and future-you) will thank you.',
         duration: '8 min',
@@ -184,7 +199,8 @@ git checkout -b feature/add-login
   },
   {
     id: 't2',
-    number: 2,
+    access: 'member',
+    number: 9,
     slug: 'python-ai',
     title: 'Python for AI',
     tagline: 'The Language',
@@ -195,6 +211,7 @@ git checkout -b feature/add-login
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'Setup: Python, pip, venv',
         blurb: 'Get a clean, isolated Python environment running.',
         duration: '15 min',
@@ -222,6 +239,7 @@ pip install -r requirements.txt` },
       },
       {
         id: 'l2',
+        access: 'member',
         title: 'Basics: Variables, Loops, Functions',
         blurb: 'The building blocks. Keep them small and obvious.',
         duration: '20 min',
@@ -251,6 +269,7 @@ print(greet("world", excited=True))` },
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'Data Structures: Lists, Dicts, JSON',
         blurb: 'How AI code moves data around.',
         duration: '18 min',
@@ -281,6 +300,7 @@ print(parsed[0]["content"])  # "what is 2+2?"` },
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Reading Docs & Errors',
         blurb: 'The real skill. The one that makes you a coder.',
         duration: '15 min',
@@ -300,6 +320,7 @@ KeyError: 42` },
       },
       {
         id: 'l5',
+        access: 'member',
         title: 'Installing & Using Packages',
         blurb: 'pip is your package manager. Use it wisely.',
         duration: '12 min',
@@ -330,7 +351,8 @@ print(resp.json()["name"])  # "learnai"` },
   },
   {
     id: 't3',
-    number: 3,
+    access: 'member',
+    number: 10,
     slug: 'talking-to-models',
     title: 'Talking to Models',
     tagline: 'The API',
@@ -341,6 +363,7 @@ print(resp.json()["name"])  # "learnai"` },
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'What is an API? REST & JSON',
         blurb: 'How programs talk to each other over the web.',
         duration: '15 min',
@@ -365,6 +388,7 @@ Authorization: Bearer sk-...
       },
       {
         id: 'l2',
+        access: 'member',
         title: 'OpenAI-Compatible Endpoints',
         blurb: 'The one API shape that rules them all.',
         duration: '18 min',
@@ -391,6 +415,7 @@ print(data["choices"][0]["message"]["content"])` },
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'Prompting: Writing Good Instructions',
         blurb: 'Garbage in, garbage out. Write prompts that can\'t be misread.',
         duration: '20 min',
@@ -412,6 +437,7 @@ by returning an empty list. Show only the code."` },
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Building a Chat App',
         blurb: 'Wire a model into a real interface.',
         duration: '25 min',
@@ -445,6 +471,7 @@ while True:
       },
       {
         id: 'l5',
+        access: 'member',
         title: 'Streaming & Error Handling',
         blurb: 'Make it fast and unbreakable.',
         duration: '20 min',
@@ -487,7 +514,8 @@ def safe_chat(messages, retries=3):
   },
   {
     id: 't4',
-    number: 4,
+    access: 'member',
+    number: 11,
     slug: 'building-with-ai',
     title: 'Building with AI',
     tagline: 'The Projects',
@@ -498,6 +526,7 @@ def safe_chat(messages, retries=3):
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'CLI Tool That Talks to a Model',
         blurb: 'Ship a terminal command powered by AI.',
         duration: '30 min',
@@ -531,6 +560,7 @@ if __name__ == "__main__":
       },
       {
         id: 'l2',
+        access: 'member',
         title: 'Web App with Model Backend',
         blurb: 'A page that talks to a model. The classic AI web app.',
         duration: '40 min',
@@ -561,6 +591,7 @@ export async function POST(req: Request) {
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'Deploying to Cloudflare Pages',
         blurb: 'Put it on the internet. Free, fast, global.',
         duration: '25 min',
@@ -584,6 +615,7 @@ wrangler pages deploy . --project-name=learnai` },
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Auth & Going Public',
         blurb: 'Let people in. Keep the bad ones out.',
         duration: '30 min',
@@ -611,7 +643,8 @@ export async function POST(req: Request) {
   },
   {
     id: 't5',
-    number: 5,
+    access: 'member',
+    number: 12,
     slug: 'going-deeper',
     title: 'Going Deeper',
     tagline: 'The Rabbit Hole',
@@ -622,6 +655,7 @@ export async function POST(req: Request) {
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'Running Models Locally',
         blurb: 'Your own model. On your own machine. No API key.',
         duration: '30 min',
@@ -644,6 +678,7 @@ curl http://localhost:11434/v1/chat/completions \\
       },
       {
         id: 'l2',
+        access: 'member',
         title: 'Fine-Tuning & Prompt Engineering',
         blurb: 'Bend a model to your will — prompts first, weights later.',
         duration: '35 min',
@@ -670,6 +705,7 @@ curl http://localhost:11434/v1/chat/completions \\
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'Agents, Tools & MCP',
         blurb: 'Models that DO things, not just say things.',
         duration: '40 min',
@@ -706,6 +742,7 @@ curl http://localhost:11434/v1/chat/completions \\
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Build Your Own AI Project',
         blurb: 'The final boss. Ship something that\'s yours.',
         duration: '∞',
@@ -738,6 +775,7 @@ curl http://localhost:11434/v1/chat/completions \\
   // From: aigf/courses/course-your-machine-and-your-voice.md — CRS-000, "TRACK 0 — Your Machine"
   {
     id: 't0',
+    access: 'free',
     number: 1,
     slug: 'your-machine',
     title: 'Your Machine',
@@ -749,6 +787,7 @@ curl http://localhost:11434/v1/chat/completions \\
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'Know Your Hardware',
         blurb: 'Before you download anything, know what you are driving.',
         duration: '20 min',
@@ -765,6 +804,7 @@ curl http://localhost:11434/v1/chat/completions \\
       },
       {
         id: 'l2',
+        access: 'free',
         title: 'Write the USB',
         blurb: 'Download the ISO, verify it, and write it to the right stick.',
         duration: '25 min',
@@ -785,6 +825,7 @@ balenaEtcher` },
       },
       {
         id: 'l3',
+        access: 'free',
         title: 'BIOS, Then the Wizard',
         blurb: 'Disable Secure Boot, pick the disk, and get a desktop that boots in under a minute.',
         duration: '30 min',
@@ -803,19 +844,14 @@ balenaEtcher` },
       },
       {
         id: 'l4',
+        access: 'free',
         title: 'The Terminal Without Fear',
         blurb: 'Six commands that carry you the whole course.',
         duration: '25 min',
         difficulty: 'beginner',
         blocks: [
           { type: 'p', text: 'Six commands that carry you the whole course:' },
-          { type: 'code', lang: 'text', code: `Command            | What it does
-pwd                | where am I
-ls                 | what is here
-cd <dir>           | move
-mkdir <name>       | make a directory
-cat <file>         | read a file
-sudo               | run one command as the machine's administrator` },
+          { type: 'table', header: ["Command", "What it does"], rows: [["pwd", "where am I"], ["ls", "what is here"], ["cd <dir>", "move"], ["mkdir <name>", "make a directory"], ["cat <file>", "read a file"], ["sudo", "run one command as the machine's administrator"]] },
           { type: 'p', text: '`pacman` is the package manager: `sudo pacman -Syu` updates the system.' },
           { type: 'p', text: '`Ctrl+C` stops anything running. It is the universal escape.' },
           { type: 'p', text: '`Tab` completes filenames. Use it.' },
@@ -824,6 +860,7 @@ sudo               | run one command as the machine's administrator` },
       },
       {
         id: 'l5',
+        access: 'free',
         title: 'Git, GitHub, and Never Breaking Main Again',
         blurb: 'Git is how your work is remembered. Learn it before you write anything big.',
         duration: '35 min',
@@ -855,16 +892,14 @@ ssh -T git@github.com         # expect: "Hi USER!"` },
       },
       {
         id: 'l6',
+        access: 'free',
         title: 'Your AI Coding Tools',
         blurb: 'Three seats, all free or open, all running on your own machine.',
         duration: '30 min',
         difficulty: 'beginner',
         blocks: [
           { type: 'p', text: 'Three seats, all free or open, all running on your own machine:' },
-          { type: 'code', lang: 'text', code: `Tool        | What it is                                          | Install
-opencode    | the terminal coding agent                          | npm i -g opencode-ai (or your distro's package)
-pi          | a second agent seat, provider-agnostic            | npm i -g @earendil-works/pi-coding-agent
-Zed         | the editor — fast, keyboard-first                  | from <https://zed.dev>` },
+          { type: 'table', header: ["Tool", "What it is", "Install"], rows: [["opencode", "the terminal coding agent", "npm i -g opencode-ai (or your distro's package)"], ["pi", "a second agent seat, provider-agnostic", "npm i -g @earendil-works/pi-coding-agent"], ["Zed", "the editor — fast, keyboard-first", "from <https://zed.dev>"]] },
           { type: 'p', text: 'Also worth having:' },
           { type: 'p', text: '**lazygit** — a terminal UI for git. `sudo pacman -S lazygit`. It turns "which commit did I break?" from archaeology into a list you can click.' },
           { type: 'p', text: '**`fzf`** — fuzzy find for everything.' },
@@ -878,6 +913,7 @@ Zed         | the editor — fast, keyboard-first                  | from <https
   // From: aigf/courses/course-your-machine-and-your-voice.md — CRS-000, "TRACK 1 — Your Voice"
   {
     id: 't6',
+    access: 'member',
     number: 2,
     slug: 'your-voice',
     title: 'Your Voice',
@@ -889,6 +925,7 @@ Zed         | the editor — fast, keyboard-first                  | from <https
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'Why Voice',
         blurb: 'A 300-word request that took two minutes of typing takes fifteen seconds of talking.',
         duration: '15 min',
@@ -901,6 +938,7 @@ Zed         | the editor — fast, keyboard-first                  | from <https
       },
       {
         id: 'l2',
+        access: 'member',
         title: 'Piper: The Machine Answers (TTS)',
         blurb: 'Piper belongs on the CPU. The lesson learned the hard way, with numbers.',
         duration: '30 min',
@@ -914,15 +952,14 @@ pip install piper-tts` },
           { type: 'code', lang: 'bash', caption: 'Say one line', code: `echo "The machine speaks." | piper --model en_US-amy-medium --output_file -` },
           { type: 'h', text: 'The lesson the hard way — Piper belongs on the CPU' },
           { type: 'p', text: 'Creating a CUDA context costs about a second per process. Piper is one-shot: you send text, it makes audio, it exits. The GPU\'s tiny inference gain is eaten whole by that context cost. Measured on an RTX A5000:' },
-          { type: 'code', lang: 'text', code: `Engine                        | CPU    | GPU     | Winner
-Whisper small.en (11 s clip)   | ~5.5 s | ~1.0 s  | GPU, ~5×
-Piper (one sentence)          | 2.0 s  | 3.1 s   | CPU` },
+          { type: 'table', header: ["Engine", "CPU", "GPU", "Winner"], rows: [["Whisper small.en (11 s clip)", "~5.5 s", "~1.0 s", "GPU, ~5×"], ["Piper (one sentence)", "2.0 s", "3.1 s", "CPU"]] },
           { type: 'p', text: 'So: Whisper on the GPU, Piper on the CPU. Flip it yourself with `voice piper gpu on` if you ever run a resident Piper server.' },
           { type: 'try', text: 'Say one sentence to the machine. It is weird the first ten times. Then it is not.' },
         ],
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'Whisper: The Machine Listens (STT)',
         blurb: 'whisper.cpp — C++, fast, runs on the GPU. The CUDA flag is the whole trick.',
         duration: '30 min',
@@ -940,6 +977,7 @@ cmake --build build --config Release -j` },
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Hold to Talk',
         blurb: 'A daemon on evdev, bound to Alt+H, run as a user systemd service.',
         duration: '35 min',
@@ -962,6 +1000,7 @@ WantedBy=default.target` },
       },
       {
         id: 'l5',
+        access: 'member',
         title: 'The Switcher',
         blurb: 'One command for the whole stack, so you never dig for a path again.',
         duration: '15 min',
@@ -979,6 +1018,7 @@ voice test                    # say a test line` },
       },
       {
         id: 'l6',
+        access: 'member',
         title: 'Sharing the GPU With Your LLM',
         blurb: 'A local model can hold 12–15 GB of VRAM resident. They can fight. Here is the ward.',
         duration: '30 min',
@@ -995,18 +1035,14 @@ voice test                    # say a test line` },
       },
       {
         id: 'l7',
+        access: 'member',
         title: 'Keybindings',
         blurb: 'Five keys in ~/.config/hypr/bindings.lua. The table is the test.',
         duration: '20 min',
         difficulty: 'beginner',
         blocks: [
           { type: 'p', text: 'In `~/.config/hypr/bindings.lua`:' },
-          { type: 'code', lang: 'text', code: `Key             | Action
-Alt+H (hold)    | push-to-talk dictation
-F10             | read the selection aloud
-SUPER+CTRL+X    | toggle dictation on/off
-SUPER+CTRL+Y    | next TTS voice
-SUPER+SHIFT+T   | open the theme picker` },
+          { type: 'table', header: ["Key", "Action"], rows: [["Alt+H (hold)", "push-to-talk dictation"], ["F10", "read the selection aloud"], ["SUPER+CTRL+X", "toggle dictation on/off"], ["SUPER+CTRL+Y", "next TTS voice"], ["SUPER+SHIFT+T", "open the theme picker"]] },
           { type: 'p', text: 'Reload with `hyprctl reload`, then check for typos with `hyprctl configerrors`.' },
           { type: 'try', text: 'Bind all five. Reload. Press them until each one does what this table says — the table is the test.' },
         ],
@@ -1017,6 +1053,7 @@ SUPER+SHIFT+T   | open the theme picker` },
   // From: aigf/courses/course-your-coding-desk.md — CRS-100
   {
     id: 't8',
+    access: 'member',
     number: 3,
     slug: 'your-coding-desk',
     title: 'Your Coding Desk',
@@ -1028,15 +1065,14 @@ SUPER+SHIFT+T   | open the theme picker` },
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'Pick Your Editor, Then Learn Two Keys',
         blurb: 'Zed\'s two AI surfaces — and the mistake everyone makes.',
         duration: '30 min',
         difficulty: 'intermediate',
         blocks: [
           { type: 'p', text: 'The editor is where you spend your eyes. Two serious choices on Linux:' },
-          { type: 'code', lang: 'text', code: `Editor   | Why                                                        | Cost to learn
-Zed      | fast, keyboard-first, built-in agent panel, project-wide search | low — it is modern and opinionated
-Neovim   | you already live in the terminal, you want total control      | high — months, then forever` },
+          { type: 'table', header: ["Editor", "Why", "Cost to learn"], rows: [["Zed", "fast, keyboard-first, built-in agent panel, project-wide search", "low — it is modern and opinionated"], ["Neovim", "you already live in the terminal, you want total control", "high — months, then forever"]] },
           { type: 'p', text: 'This course assumes **Zed**, because that is the desk this material is written from. Nothing here is *against* Neovim; the stations are the same.' },
           { type: 'h', text: 'Zed\'s two surfaces for AI — and the mistake everyone makes' },
           { type: 'code', lang: 'text', code: `language_models  ──►  agent.default_model  ──►  Zed's own Agent panel
@@ -1055,6 +1091,7 @@ agent_servers    ──►  external agents (opencode, …)` },
       },
       {
         id: 'l2',
+        access: 'member',
         title: 'The Terminal Is the Workbench',
         blurb: 'A multiplexer keeps them all in one window — and they survive closing it.',
         duration: '30 min',
@@ -1062,10 +1099,7 @@ agent_servers    ──►  external agents (opencode, …)` },
         blocks: [
           { type: 'p', text: 'Your editor is one pane. Your real work spans three: editor, terminal, and the thing that is running. A **multiplexer** keeps them all in one window, and — this is the part that changes your life — **they survive closing the window**.' },
           { type: 'p', text: 'Start a session, detach, close the laptop, come back tomorrow, reattach. Nothing died.' },
-          { type: 'code', lang: 'text', code: `Tool        | Use it when
-tmux        | the classic; you already know it, or want no novelty
-herdr       | you also drive AI agents in panes and want their sessions to survive
-waveterm    | you want terminals, files and docs in one programmable surface` },
+          { type: 'table', header: ["Tool", "Use it when"], rows: [["tmux", "the classic; you already know it, or want no novelty"], ["herdr", "you also drive AI agents in panes and want their sessions to survive"], ["waveterm", "you want terminals, files and docs in one programmable surface"]] },
           { type: 'h', text: 'The layout of a real session' },
           { type: 'code', lang: 'text', code: `pane 1  editor
 pane 2  shell           ← run the tests
@@ -1078,6 +1112,7 @@ pane 4  lazygit         ← see exactly what changed` },
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'See What Changed (lazygit)',
         blurb: 'Your agent just rewrote eleven files. git diff will not tell you whether the change is right.',
         duration: '30 min',
@@ -1098,6 +1133,7 @@ lazygit` },
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Find Things Instantly',
         blurb: 'Two tools that pay for themselves in the first hour.',
         duration: '25 min',
@@ -1117,6 +1153,7 @@ lazygit` },
       },
       {
         id: 'l5',
+        access: 'member',
         title: 'Know What Your Machine Is Doing',
         blurb: 'Three lessons in three commands: btop, nvidia-smi, journalctl.',
         duration: '25 min',
@@ -1135,6 +1172,7 @@ journalctl --user -u <service> -f  # watch its logs live` },
       },
       {
         id: 'l6',
+        access: 'member',
         title: 'Never Run an Agent as Root',
         blurb: 'Agents run as you, never as root. That pause is a feature.',
         duration: '20 min',
@@ -1148,6 +1186,7 @@ journalctl --user -u <service> -f  # watch its logs live` },
       },
       {
         id: 'l7',
+        access: 'member',
         title: 'The Whole Desk, Once',
         blurb: 'Your checklist before you call the desk finished.',
         duration: '20 min',
@@ -1170,6 +1209,7 @@ journalctl --user -u <service> -f  # watch its logs live` },
   // From: aigf/courses/course-working-with-agents.md — CRS-300
   {
     id: 't10',
+    access: 'member',
     number: 4,
     slug: 'working-with-coding-agents',
     title: 'Working With Coding Agents',
@@ -1181,6 +1221,7 @@ journalctl --user -u <service> -f  # watch its logs live` },
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'What an Agent Actually Is',
         blurb: 'Strip away the marketing and it is a loop. That is the whole diagnostic.',
         duration: '20 min',
@@ -1197,6 +1238,7 @@ journalctl --user -u <service> -f  # watch its logs live` },
       },
       {
         id: 'l2',
+        access: 'member',
         title: 'The Brief: Six Parts, Every Time',
         blurb: 'A good request is not longer. It is complete. Six parts, in this order.',
         duration: '35 min',
@@ -1222,6 +1264,7 @@ journalctl --user -u <service> -f  # watch its logs live` },
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'Context Is the Fuel',
         blurb: 'A hallucinated fact is nearly always a missing fact. Ask "what did I not give it?"',
         duration: '25 min',
@@ -1237,6 +1280,7 @@ journalctl --user -u <service> -f  # watch its logs live` },
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Loop With It, Don\'t Deleg Blindly',
         blurb: 'The mid-course correction is the cheapest correction in the world.',
         duration: '25 min',
@@ -1256,6 +1300,7 @@ you:     verify independently, then merge` },
       },
       {
         id: 'l5',
+        access: 'member',
         title: 'Never Trust, Verify',
         blurb: 'The agent will tell you it worked. It may be lying, and it does not know it.',
         duration: '35 min',
@@ -1277,6 +1322,7 @@ you:     verify independently, then merge` },
       },
       {
         id: 'l6',
+        access: 'member',
         title: 'Skills: Teaching the Machine Your Ways',
         blurb: 'A written procedure the agent loads when the task calls for it. The law section is why.',
         duration: '30 min',
@@ -1295,6 +1341,7 @@ the law      what must never happen (and why)` },
       },
       {
         id: 'l7',
+        access: 'member',
         title: 'Tools: Teaching the Machine Your Hands',
         blurb: 'Adding every tool available is not power; it is noise. Four good tools beat twenty.',
         duration: '30 min',
@@ -1317,17 +1364,14 @@ the law      what must never happen (and why)` },
       },
       {
         id: 'l8',
+        access: 'member',
         title: 'Sub-Agents: The Shape of the Work Decides',
         blurb: 'Parallel work goes into separate worktrees on separate branches. Always.',
         duration: '30 min',
         difficulty: 'intermediate',
         blocks: [
           { type: 'p', text: 'Sometimes one agent is the wrong number. Use more when the work is **parallel or isolated**; use one when it is **tight and coherent**.' },
-          { type: 'code', lang: 'text', code: `The work                    | The shape   | The right call
-one bug, one file           | tight      | one agent, now
-four independent pages       | parallel    | four sub-agents, isolated worktrees
-a research question         | read-only  | one sub-agent, no writes
-a refactor across 30 files  | coherent   | one agent, staged, with checks` },
+          { type: 'table', header: ["The work", "The shape", "The right call"], rows: [["one bug, one file", "tight", "one agent, now"], ["four independent pages", "parallel", "four sub-agents, isolated worktrees"], ["a research question", "read-only", "one sub-agent, no writes"], ["a refactor across 30 files", "coherent", "one agent, staged, with checks"]] },
           { type: 'p', text: '**The isolation law:** parallel work goes into **separate worktrees on separate branches.** Two agents in the same directory is not teamwork; it is a race, and the loser is whichever file got overwritten. `git worktree add` costs one line and prevents a class of disaster entirely.' },
           { type: 'p', text: '**The law for the dispatcher:** a sub-agent inherits the brief and *nothing else*. It cannot see the conversation you had. Whatever it does not know, it will invent. This is why Lesson 300.2 comes first.' },
           { type: 'try', text: 'Take a four-part task. Give each part its own worktree and its own brief. Merge them in order. The four changes never touched.' },
@@ -1335,6 +1379,7 @@ a refactor across 30 files  | coherent   | one agent, staged, with checks` },
       },
       {
         id: 'l9',
+        access: 'member',
         title: 'The Working Agreement',
         blurb: 'Everything above, as ten lines you can keep above your desk.',
         duration: '20 min',
@@ -1360,6 +1405,7 @@ a refactor across 30 files  | coherent   | one agent, staged, with checks` },
   // From: aigf/courses/course-github-and-shipping.md — CRS-200
   {
     id: 't9',
+    access: 'member',
     number: 5,
     slug: 'github-and-getting-code-shipped',
     title: 'GitHub and Getting Code Shipped',
@@ -1371,6 +1417,7 @@ a refactor across 30 files  | coherent   | one agent, staged, with checks` },
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'The Account and the Key',
         blurb: 'One account, yours, for you. An SSH key, so you never type a password.',
         duration: '20 min',
@@ -1390,6 +1437,7 @@ cat ~/.ssh/id_ed25519.pub` },
       },
       {
         id: 'l2',
+        access: 'member',
         title: '`gh`: GitHub From Your Keyboard',
         blurb: 'The web UI is for browsing. `gh` is for working. `gh pr create` is the skill.',
         duration: '30 min',
@@ -1413,6 +1461,7 @@ gh repo view --web         # open in the browser` },
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'The Branch Law',
         blurb: '`main` is finished, working work. You never type on it.',
         duration: '30 min',
@@ -1439,6 +1488,7 @@ why this, in a sentence` },
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Pull Requests Are the Delivery',
         blurb: 'A PR is not bureaucracy. It is the artifact that review lives in.',
         duration: '25 min',
@@ -1458,6 +1508,7 @@ why this, in a sentence` },
       },
       {
         id: 'l5',
+        access: 'member',
         title: 'Secrets Never Go In The Repo',
         blurb: 'A secret is referenced by path, never written down. Prevention is the whole lesson.',
         duration: '30 min',
@@ -1477,6 +1528,7 @@ GITHUB_TOKEN=` },
       },
       {
         id: 'l6',
+        access: 'member',
         title: 'Deploy: The Same Chain, One Time More',
         blurb: 'Build, push, merge, release, verify, record. Six steps, every time.',
         duration: '30 min',
@@ -1496,6 +1548,7 @@ GITHUB_TOKEN=` },
       },
       {
         id: 'l7',
+        access: 'member',
         title: 'When It Breaks in Production',
         blurb: 'Read the logs first. Roll back before you debug. Write it down.',
         duration: '25 min',
@@ -1515,6 +1568,7 @@ GITHUB_TOKEN=` },
   // From: aigf/courses/course-your-first-project.md — CRS-050
   {
     id: 't7',
+    access: 'member',
     number: 6,
     slug: 'your-first-real-project',
     title: 'Your First Real Project',
@@ -1526,6 +1580,7 @@ GITHUB_TOKEN=` },
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'The Empty Folder, Named Properly',
         blurb: 'The five things that must exist on day one. `.gitignore` before the first commit, not after.',
         duration: '25 min',
@@ -1561,6 +1616,7 @@ git commit --allow-empty -m "chore: start the project"` },
       },
       {
         id: 'l2',
+        access: 'member',
         title: '`AGENTS.md`: The Contract at the Root',
         blurb: 'The single highest-value file in the repository, and the one beginners skip.',
         duration: '30 min',
@@ -1600,6 +1656,7 @@ Numbered, short, checkable. Not philosophy — rules a reviewer can point at.` }
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'The Shape of a Real Codebase',
         blurb: 'There is no single truth, but there is a shape that has survived. Three rules keep it from rotting.',
         duration: '30 min',
@@ -1628,6 +1685,7 @@ Numbered, short, checkable. Not philosophy — rules a reviewer can point at.` }
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Plans on the Shelf',
         blurb: 'Plans are append-only. A correction is a new entry that cites the old one. Never rewrite, never delete.',
         duration: '25 min',
@@ -1655,6 +1713,7 @@ plan above.` },
       },
       {
         id: 'l5',
+        access: 'member',
         title: 'Decisions and Architecture, Written Down',
         blurb: 'Architecture is not what you built. It is what you promised, so that the next person knows the rules.',
         duration: '25 min',
@@ -1686,6 +1745,7 @@ SQLite via Prisma. Schema in prisma/schema.prisma. One source of truth.
       },
       {
         id: 'l6',
+        access: 'member',
         title: 'The Changelog Is Append-Only, and So Is Everything',
         blurb: 'Append. Date every entry. Never rewrite, never delete, never "clean up" a record.',
         duration: '25 min',
@@ -1708,6 +1768,7 @@ SQLite via Prisma. Schema in prisma/schema.prisma. One source of truth.
       },
       {
         id: 'l7',
+        access: 'member',
         title: 'The README and the Registry',
         blurb: 'A registry names the key and never the token. A tool must never guess a remote.',
         duration: '25 min',
@@ -1732,6 +1793,7 @@ SQLite via Prisma. Schema in prisma/schema.prisma. One source of truth.
       },
       {
         id: 'l8',
+        access: 'member',
         title: 'Giving the Project Its Agents and Skills',
         blurb: 'An agent gets a narrow area, a clear deliverable, and a hard boundary.',
         duration: '30 min',
@@ -1745,10 +1807,7 @@ steps       what to do, in order, as real commands
 the law      what must never happen, and why` },
           { type: 'p', text: 'The **law** section is what makes it worth writing. "Never push to `main`" prevents more damage than any step of advice ever could.' },
           { type: 'p', text: '**An agent definition is a named specialist with a brief.** In a real project you will want two or three, not thirty:' },
-          { type: 'code', lang: 'text', code: `The agent     | The brief
-the smith    | builds features in isolation, opens PRs, never merges
-the reviewer | reads the diff, finds what breaks, never edits
-the keeper   | updates docs, changelog and registry; writes no code` },
+          { type: 'table', header: ["The agent", "The brief"], rows: [["the smith", "builds features in isolation, opens PRs, never merges"], ["the reviewer", "reads the diff, finds what breaks, never edits"], ["the keeper", "updates docs, changelog and registry; writes no code"]] },
           { type: 'p', text: '**The rule that keeps a small fleet sane:** an agent gets a **narrow area, a clear deliverable, and a hard boundary.** An agent with "fix the site" has no plan. An agent with "the Academy section must show real track data; do not touch the hero; deliver a PR" finishes in one round.' },
           { type: 'p', text: '**Work in isolation.** Complex work goes to a separate **worktree** on its own branch, so a failure can never reach the working tree:' },
           { type: 'code', lang: 'bash', code: `git worktree add ../my-project-feature -b feature/real-tracks` },
@@ -1761,6 +1820,7 @@ the keeper   | updates docs, changelog and registry; writes no code` },
       },
       {
         id: 'l9',
+        access: 'member',
         title: 'The Whole First Project, Once',
         blurb: 'The build order, in the order you should actually do it.',
         duration: '30 min',
@@ -1787,6 +1847,7 @@ the keeper   | updates docs, changelog and registry; writes no code` },
   // From: aigf/courses/course-managing-the-work.md — CRS-400
   {
     id: 't11',
+    access: 'member',
     number: 7,
     slug: 'managing-the-work-in-the-codebase',
     title: 'Managing the Work in the Codebase',
@@ -1798,6 +1859,7 @@ the keeper   | updates docs, changelog and registry; writes no code` },
     lessons: [
       {
         id: 'l1',
+        access: 'free',
         title: 'The Ledger, or Nothing Is Real',
         blurb: 'If it is not written down, it did not happen. Three ledgers are enough to run a project.',
         duration: '30 min',
@@ -1807,10 +1869,7 @@ the keeper   | updates docs, changelog and registry; writes no code` },
           { type: 'p', text: '**If it is not written down, it did not happen.**' },
           { type: 'p', text: 'Not in your head. Not in a chat scrollback. Not in a colleague\'s memory of a Tuesday. Written down, dated, in a place the next person will look.' },
           { type: 'h', text: 'Three ledgers, and they are enough to run a project' },
-          { type: 'code', lang: 'text', code: `Ledger         | What it holds                | Append?
-Issues         | what needs doing, and why    | closed, never deleted
-Commits / PRs  | what changed, and when       | immutable
-Changelog      | what this means for the user | append-only, dated` },
+          { type: 'table', header: ["Ledger", "What it holds", "Append?"], rows: [["Issues", "what needs doing, and why", "closed, never deleted"], ["Commits / PRs", "what changed, and when", "immutable"], ["Changelog", "what this means for the user", "append-only, dated"]] },
           { type: 'p', text: '**Issues are the work queue. Commits are the truth. The changelog is the story told to users.** When those three disagree, you have a coordination problem — and the disagreement is always visible if all three are maintained.' },
           { type: 'p', text: '**The discipline that makes it work, and it is one line:** an issue is not finished until it is **closed by its own pull request**. Not "done, closing it manually." The PR closes it. That single rule is what keeps the queue honest — because a stale open issue is a question someone can always ask.' },
           { type: 'try', text: 'Open your project\'s oldest five issues and answer honestly: is each one still true? Close what is finished. Delete none of them — close them.' },
@@ -1818,6 +1877,7 @@ Changelog      | what this means for the user | append-only, dated` },
       },
       {
         id: 'l2',
+        access: 'member',
         title: 'The Branch Is the Unit of Work',
         blurb: 'A branch is not just version control — it is a conversation.',
         duration: '30 min',
@@ -1841,6 +1901,7 @@ chore/deps-bump-2026-09       ← maintenance` },
       },
       {
         id: 'l3',
+        access: 'member',
         title: 'Isolation: Worktrees',
         blurb: 'A failed or abandoned piece of work never reaches the working tree. It simply is not merged.',
         duration: '30 min',
@@ -1862,6 +1923,7 @@ chore/deps-bump-2026-09       ← maintenance` },
       },
       {
         id: 'l4',
+        access: 'member',
         title: 'Pull Requests as the Unit of Review',
         blurb: 'A PR should be reviewable in one sitting. A 3,000-line PR is approved by fatigue.',
         duration: '30 min',
@@ -1884,6 +1946,7 @@ chore/deps-bump-2026-09       ← maintenance` },
       },
       {
         id: 'l5',
+        access: 'member',
         title: 'The Review Surface',
         blurb: 'An author does not review their own change, and does not merge it. The value of the gate is in it being a gate.',
         duration: '30 min',
@@ -1901,6 +1964,7 @@ chore/deps-bump-2026-09       ← maintenance` },
       },
       {
         id: 'l6',
+        access: 'member',
         title: 'Working With Agents in the Flow',
         blurb: 'An agent is a fast contributor, and the whole flow applies to it — more, because the failure modes differ.',
         duration: '30 min',
@@ -1921,6 +1985,7 @@ chore/deps-bump-2026-09       ← maintenance` },
       },
       {
         id: 'l7',
+        access: 'member',
         title: 'Cadence: How a Project Stays Honest',
         blurb: 'Coordination fails on rhythm, not on principle. WIP limit: one.',
         duration: '35 min',
@@ -1948,6 +2013,7 @@ chore/deps-bump-2026-09       ← maintenance` },
       },
       {
         id: 'l8',
+        access: 'member',
         title: 'When It Goes Wrong',
         blurb: 'Three failures, each with the fix that works. Roll back before you debug.',
         duration: '35 min',
@@ -1971,6 +2037,7 @@ chore/deps-bump-2026-09       ← maintenance` },
       },
       {
         id: 'l9',
+        access: 'member',
         title: 'The Whole Flow, Once',
         blurb: 'Run this as a checklist on your next five tasks. By the fifth you will not be able to work without it.',
         duration: '30 min',
@@ -2024,11 +2091,23 @@ export function getLesson(trackId: string, lessonId: string): { track: Track; le
   return { track, lesson }
 }
 
+/** Total minutes of authored lesson time, summed from each lesson's duration. */
 export const trackStats = {
   tracks: tracks.length,
   lessons: tracks.reduce((n, t) => n + t.lessons.length, 0),
-  hours: tracks.reduce(
+  minutes: tracks.reduce(
     (n, t) => n + t.lessons.reduce((m, l) => m + (parseInt(l.duration) || 0), 0),
     0,
   ),
 }
+
+/** The same total in whole hours, rounded down - the only honest public figure. */
+export const trackStatsHours = Math.floor(trackStats.minutes / 60)
+
+/** A lesson anyone may read forever, with no account. The minimal ground. */
+export function isFreeLesson(lesson: Lesson): boolean {
+  return lesson.access === 'free'
+}
+
+/** Tracks the public may read end to end. */
+export const freeTracks = tracks.filter((t) => t.access === 'free')
