@@ -1,5 +1,5 @@
 import { ArrowRight, Users, CalendarDays, Hand } from "lucide-react";
-import { COMMUNITY_URL, AIGF_URL, AIGF_MEMBERSHIP_URL, YMIR_URL, YMIR_REPO_URL } from "@/lib/site";
+import { COMMUNITY_URL, AIGF_URL, AIGF_MEMBERSHIP_URL, YMIR_URL, YMIR_REPO_URL, YOUTUBE_URL } from "@/lib/site";
 
 /**
  * The bridge.
@@ -63,6 +63,14 @@ export function TheCommunity() {
           >
             See the community — $49 per person, per month
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+          </a>
+          <a
+            href={YOUTUBE_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-12 items-center justify-center gap-2 border border-border px-6 text-sm font-semibold transition-colors hover:border-primary/60 hover:text-primary"
+          >
+            Prefer to watch? The channel
           </a>
           <a
             href={COMMUNITY_URL}

@@ -25,3 +25,8 @@ export const SUPPORT_URL =
 export const YMIR_URL =
   process.env.NEXT_PUBLIC_YMIR_URL ?? 'https://ymir.zerwiz.org'
 export const YMIR_REPO_URL = 'https://github.com/zerwiz/ymir'
+
+// The channel. The podcast and the video lessons are published here - it is the
+// same work in the other medium, not a separate product.
+export const YOUTUBE_URL = 'https://www.youtube.com/@LJLindbom'
+export const YOUTUBE_COMMUNITY_URL = `${YOUTUBE_URL}/community`

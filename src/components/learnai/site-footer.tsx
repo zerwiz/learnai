@@ -1,6 +1,6 @@
 'use client'
 
-import { Coffee, Github, Heart, MessageCircle, Terminal, Boxes } from 'lucide-react'
+import { Coffee, Github, Heart, MessageCircle, Terminal, Boxes , Youtube } from 'lucide-react'
 import {
   COMMUNITY_URL,
   DISCUSSIONS_URL,
@@ -9,6 +9,7 @@ import {
   SUPPORT_URL,
   YMIR_REPO_URL,
   YMIR_URL,
+  YOUTUBE_URL,
 } from '@/lib/site'
 
 export function SiteFooter() {
@@ -63,6 +64,16 @@ export function SiteFooter() {
               connect
             </h4>
             <ul className="mt-3 space-y-2 text-sm">
+              <li>
+                <a
+                  href={YOUTUBE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <Youtube className="size-3.5" /> youtube — @LJLindbom
+                </a>
+              </li>
               <li>
                 <a
                   href={YMIR_URL}
