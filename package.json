@@ -2,7 +2,7 @@
   "name": "learnai",
   "version": "0.2.1",
   "private": true,
-  "description": "Courses for AI geeks & freaks — a hands-on course site with a live model playground.",
+  "description": "Courses for AI geeks & freaks \u2014 a hands-on course site with a live model playground.",
   "license": "MIT",
   "author": "zerwiz",
   "homepage": "https://learn.zerwiz.org",
@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
-    "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
+    "build": "next build && mkdir -p .next/standalone/.next && cp -r .next/static .next/standalone/.next/static && cp -r public .next/standalone/public",
     "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
     "lint": "eslint .",
     "db:push": "prisma db push --accept-data-loss",
