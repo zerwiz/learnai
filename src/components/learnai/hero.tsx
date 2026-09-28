@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { ArrowRight, Cpu, GitBranch, Sparkles, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { trackStats } from '@/lib/course-data'
+import { trackStats, trackStatsHours } from '@/lib/course-data'
 
 type HeroProps = {
   onExplore: () => void
@@ -34,7 +34,7 @@ export function Hero({ onExplore, onPlayground }: HeroProps) {
   const stats = [
     { label: 'tracks', value: String(trackStats.tracks).padStart(2, '0') },
     { label: 'lessons', value: String(trackStats.lessons).padStart(2, '0') },
-    { label: 'hands-on hrs', value: `${trackStats.hours}+` },
+    { label: 'hands-on hrs', value: `${trackStatsHours}+` },
   ]
 
   return (

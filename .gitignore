@@ -56,3 +56,6 @@ server.log
 # local sqlite database
 /db/*.db
 /db/*.db-journal
+
+# Yggdrasil worktree pool - never committed
+.yggdrasil/
