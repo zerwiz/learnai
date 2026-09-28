@@ -74,30 +74,42 @@ say "  ${DIM}no invented figures in the build${OFF}"
 
 # ---- 4. ship: release directory, then an atomic symlink swap ----------------
 RELEASE="$REMOTE_RELEASES/$(date +%Y%m%d-%H%M%S)"
-step "shipping as a release, never over the live tree"
+step "building in a staging tree, then swapping the directory"
+# WHY THIS SHAPE, after two wrong ones:
+#   1. building over the tree a live process serves from deleted the CSS;
+#   2. shipping to a release directory changed nothing a visitor could see,
+#      because systemd runs the tree.
+# So: the build happens in a FULL COPY of the tree, and only the finished .next
+# is swapped in. The live tree is never written to, and the swap is a rename.
 ssh "$REMOTE" "set -e
   sudo -u zerwizserver bash -lc '
     set -e
     cd $REMOTE_DIR
     git fetch --quiet origin && git reset --hard origin/\$(git rev-parse --abbrev-ref HEAD)
     /home/zerwizserver/.bun/bin/bun install >/dev/null
-    mkdir -p $REMOTE_RELEASES
-    rm -rf $RELEASE && mkdir -p $RELEASE
-    cp -r .next $RELEASE/.next
-    cp -r public $RELEASE/public 2>/dev/null || true
-    [ -f package.json ] && cp package.json $RELEASE/  || true
-    ln -sfn $RELEASE $REMOTE_CURRENT
-    # THE UNIT RUNS FROM THE TREE, NOT THE SYMLINK. systemd is configured with
-    # WorkingDirectory=$REMOTE_DIR and ExecStart=.../.next/standalone/server.js,
-    # so shipping only to a release directory changed nothing a visitor could
-    # see - and we spent an hour wondering why a shipped fix was still not live.
-    # So: .next itself becomes the symlink. Rollback is one ln -sfn back to the
-    # previous release, and the old tree is never overwritten, only unlinked.
-    if [ -e .next ] && [ ! -L .next ]; then
-      mv .next "$(mktemp -d)/prev-next"
+    if [ -f prisma/schema.prisma ]; then
+      echo "  migrating"
+      npx prisma generate >/dev/null
+      npx prisma migrate deploy
     fi
-    ln -sfn $RELEASE/.next .next
-    echo "  .next -> $RELEASE/.next"
+
+    STAGE=$RELEASE/stage
+    rm -rf $RELEASE
+    mkdir -p $RELEASE
+    # a full copy of the tree, minus the build we are about to replace
+    mkdir -p $STAGE
+    tar -c --exclude=.next --exclude=node_modules . | tar -x -C $STAGE
+    ln -s $REMOTE_DIR/node_modules $STAGE/node_modules
+    cd $STAGE
+    /home/zerwizserver/.bun/bin/bun run build
+
+    # swap: the rename is the deploy. The old build is kept for a rollback.
+    cd $REMOTE_DIR
+    if [ -d .next ]; then mv .next $RELEASE/.next.previous; fi
+    mv $STAGE/.next .next
+    cp -r $STAGE/public .next/standalone/public 2>/dev/null || true
+    cp -r .next/static .next/standalone/.next/static 2>/dev/null || true
+    ln -sfn $RELEASE $REMOTE_CURRENT
   '"
 say "  ${DIM}release: $RELEASE${OFF}"
 say "  ${DIM}current → $RELEASE${OFF}"
