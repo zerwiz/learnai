@@ -19,3 +19,9 @@ export const AIGF_MEMBERSHIP_URL = `${AIGF_URL}/courses`
 // Support: the Allfather's tip jar.
 export const SUPPORT_URL =
   process.env.NEXT_PUBLIC_SUPPORT_URL ?? 'https://ko-fi.com/zerwiz'
+
+// Ymir, the agent OS this course is written from. A free, public repo, and the
+// place the tools behind these lessons come from.
+export const YMIR_URL =
+  process.env.NEXT_PUBLIC_YMIR_URL ?? 'https://ymir.zerwiz.org'
+export const YMIR_REPO_URL = 'https://github.com/zerwiz/ymir'
