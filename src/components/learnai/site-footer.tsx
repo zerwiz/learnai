@@ -41,6 +41,7 @@ export function SiteFooter() {
             </h4>
             <ul className="mt-3 space-y-2 text-sm">
               <li className="text-muted-foreground hover:text-foreground">01 &middot; your machine</li>
+              <li className="text-muted-foreground hover:text-foreground">02 &middot; your voice</li>
               <li className="text-muted-foreground hover:text-foreground">03 &middot; your coding desk</li>
               <li className="text-muted-foreground hover:text-foreground">04 &middot; working with coding agents</li>
               <li className="text-muted-foreground hover:text-foreground">05 &middot; github &amp; getting code shipped</li>

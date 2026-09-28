@@ -8,6 +8,7 @@ import { TrackDetail } from '@/components/learnai/track-detail'
 import { LessonView } from '@/components/learnai/lesson-view'
 import { Playground } from '@/components/learnai/playground'
 import { Community } from '@/components/learnai/community'
+import { TheCommunity } from '@/components/learnai/the-community'
 import { SiteFooter } from '@/components/learnai/site-footer'
 import { getLesson, type Track } from '@/lib/course-data'
 import type { ChatContext } from '@/lib/chat-context'
@@ -83,7 +84,8 @@ export default function Home() {
               onPlayground={() => setView('playground')}
             />
             <TrackGrid onSelect={openTrack} />
-            <Community />
+            <TheCommunity />
+      <Community />
           </>
         )}
 

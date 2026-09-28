@@ -82,6 +82,12 @@ export function Hero({ onExplore, onPlayground }: HeroProps) {
                 <Sparkles className="size-4 text-primary" />
                 Try the playground
               </Button>
+              <a
+                href="#community-bridge"
+                className="inline-flex h-10 items-center px-2 text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+              >
+                What does the community add? →
+              </a>
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs text-muted-foreground">
