@@ -87,6 +87,19 @@ ssh "$REMOTE" "set -e
     cp -r public $RELEASE/public 2>/dev/null || true
     [ -f package.json ] && cp package.json $RELEASE/  || true
     ln -sfn $RELEASE $REMOTE_CURRENT
+    # THE UNIT RUNS FROM THE TREE, NOT THE SYMLINK. systemd is configured with
+    # WorkingDirectory=$REMOTE_DIR and ExecStart=.../.next/standalone/server.js,
+    # so shipping only to a release directory changed nothing a visitor could
+    # see - and we spent an hour wondering why a shipped fix was still not live.
+    # So: .next itself becomes the symlink. Rollback is one ln -sfn back to the
+    # previous release, and the old tree is never overwritten, only unlinked.
+    PREV=""
+    if [ -e .next ] && [ ! -L .next ]; then
+      PREV=$(mktemp -d)/prev-next
+      mv .next "$PREV"
+    fi
+    ln -sfn $RELEASE/.next .next
+    echo "  .next -> $RELEASE/.next"
   '"
 say "  ${DIM}release: $RELEASE${OFF}"
 say "  ${DIM}current → $RELEASE${OFF}"

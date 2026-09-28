@@ -58,7 +58,7 @@ echo "$page" | grep -q "Zero fluff." && ok "the heading is 'Zero fluff.' — no 
 head_ "6. the footer lists every track, including 02"
 # The footer renders a literal middot, not an entity - check what is rendered.
 for n in 01 02 03 12; do
-  echo "$page" | grep -qE "$n (\&middot;|·)" && ok "footer has $n" || bad "footer is missing $n"
+  printf '%s' "$page" | grep -qF "$n ·" && ok "footer has $n" || bad "footer is missing $n"
 done
 
 head_ "7. the free tier is not a wall"
