@@ -1,12 +1,14 @@
 'use client'
 
-import { Coffee, Github, Heart, MessageCircle, Terminal } from 'lucide-react'
+import { Coffee, Github, Heart, MessageCircle, Terminal, Boxes } from 'lucide-react'
 import {
   COMMUNITY_URL,
   DISCUSSIONS_URL,
   ISSUES_URL,
   REPO_URL,
   SUPPORT_URL,
+  YMIR_REPO_URL,
+  YMIR_URL,
 } from '@/lib/site'
 
 export function SiteFooter() {
@@ -61,6 +63,26 @@ export function SiteFooter() {
               connect
             </h4>
             <ul className="mt-3 space-y-2 text-sm">
+              <li>
+                <a
+                  href={YMIR_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <Boxes className="size-3.5" /> ymir — the agent os
+                </a>
+              </li>
+              <li>
+                <a
+                  href={YMIR_REPO_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <Boxes className="size-3.5" /> ymir on github
+                </a>
+              </li>
               <li>
                 <a
                   href={COMMUNITY_URL}

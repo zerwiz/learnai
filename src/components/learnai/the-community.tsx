@@ -1,5 +1,5 @@
 import { ArrowRight, Users, CalendarDays, Hand } from "lucide-react";
-import { COMMUNITY_URL, AIGF_URL, AIGF_MEMBERSHIP_URL } from "@/lib/site";
+import { COMMUNITY_URL, AIGF_URL, AIGF_MEMBERSHIP_URL, YMIR_URL, YMIR_REPO_URL } from "@/lib/site";
 
 /**
  * The bridge.
@@ -72,6 +72,35 @@ export function TheCommunity() {
           >
             Or just come hang in the Discord
           </a>
+        </div>
+
+        <div className="mt-10 border-t border-border pt-8">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            {"// what runs the work behind all this"}
+          </p>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            These lessons are written from machines that run{" "}
+            <a
+              href={YMIR_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-foreground underline underline-offset-4 hover:text-primary"
+            >
+              Ymir
+            </a>
+            , a single-operator agent OS: a fleet of named agents in sealed
+            sandboxes, a memory well, parallel git worktrees, and an
+            anti-hallucination gate. It is a hobby project, open and free —{" "}
+            <a
+              href={YMIR_REPO_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-4 hover:text-primary"
+            >
+              read it, fork it, use it
+            </a>
+            .
+          </p>
         </div>
 
         <p className="mt-6 font-mono text-xs text-muted-foreground">
