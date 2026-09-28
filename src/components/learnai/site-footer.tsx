@@ -40,11 +40,17 @@ export function SiteFooter() {
               tracks
             </h4>
             <ul className="mt-3 space-y-2 text-sm">
-              <li className="text-muted-foreground hover:text-foreground">01 · git &amp; github</li>
-              <li className="text-muted-foreground hover:text-foreground">02 · python for ai</li>
-              <li className="text-muted-foreground hover:text-foreground">03 · talking to models</li>
-              <li className="text-muted-foreground hover:text-foreground">04 · building with ai</li>
-              <li className="text-muted-foreground hover:text-foreground">05 · going deeper</li>
+              <li className="text-muted-foreground hover:text-foreground">01 &middot; your machine</li>
+              <li className="text-muted-foreground hover:text-foreground">03 &middot; your coding desk</li>
+              <li className="text-muted-foreground hover:text-foreground">04 &middot; working with coding agents</li>
+              <li className="text-muted-foreground hover:text-foreground">05 &middot; github &amp; getting code shipped</li>
+              <li className="text-muted-foreground hover:text-foreground">06 &middot; your first real project</li>
+              <li className="text-muted-foreground hover:text-foreground">07 &middot; managing the work</li>
+              <li className="text-muted-foreground hover:text-foreground">08 &middot; git &amp; github</li>
+              <li className="text-muted-foreground hover:text-foreground">09 &middot; python for ai</li>
+              <li className="text-muted-foreground hover:text-foreground">10 &middot; talking to models</li>
+              <li className="text-muted-foreground hover:text-foreground">11 &middot; building with ai</li>
+              <li className="text-muted-foreground hover:text-foreground">12 &middot; going deeper</li>
             </ul>
           </div>
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { tracks, trackStats, trackStatsHours, isFreeLesson } from '@/lib/course-data'
+import { orderedTracks as tracks, trackStats, trackStatsHours, isFreeLesson } from '@/lib/course-data'
 
 export const dynamic = 'force-static'
 

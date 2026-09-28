@@ -2111,3 +2111,7 @@ export function isFreeLesson(lesson: Lesson): boolean {
 
 /** Tracks the public may read end to end. */
 export const freeTracks = tracks.filter((t) => t.access === 'free')
+
+/** THE ORDER. The array above is append-order for git's sake; this is teaching
+ *  order, and every surface that shows a curriculum must use it. */
+export const orderedTracks: Track[] = [...tracks].sort((a, b) => a.number - b.number)

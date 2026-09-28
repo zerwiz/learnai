@@ -3,7 +3,7 @@
 import { ArrowRight, Clock } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { tracks, type Track } from '@/lib/course-data'
+import { orderedTracks, trackStats, type Track } from '@/lib/course-data'
 import { TrackIcon } from './track-icon'
 import { accentClasses } from './track-icons'
 
@@ -21,11 +21,11 @@ export function TrackGrid({ onSelect, activeTrackId }: TrackGridProps) {
             {'// the curriculum'}
           </p>
           <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Five tracks. Zero fluff.
+            Zero fluff.
           </h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
             Follow them in order, or jump around — your call. Every lesson has code you
-            can run, break, and improve. Start with Track 01 if you&rsquo;ve never written
+            can run, break, and improve. Start at the top if you&rsquo;ve never written
             a line of code.
           </p>
         </div>
@@ -35,7 +35,7 @@ export function TrackGrid({ onSelect, activeTrackId }: TrackGridProps) {
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {tracks.map((track) => {
+        {orderedTracks.map((track) => {
           const a = accentClasses[track.accent]
           const isActive = activeTrackId === track.id
           return (
