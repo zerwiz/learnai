@@ -84,7 +84,7 @@ step "building in a staging tree, then swapping the directory"
 ssh "$REMOTE" "set -e
   sudo -u zerwizserver bash -lc '
     set -e
-    cd $REMOTE_DIR
+    cd \$REMOTE_DIR
     git fetch --quiet origin && git reset --hard origin/\$(git rev-parse --abbrev-ref HEAD)
     /home/zerwizserver/.bun/bin/bun install >/dev/null
     if [ -d prisma/migrations ]; then
@@ -97,17 +97,17 @@ ssh "$REMOTE" "set -e
     rm -rf $RELEASE
     mkdir -p $RELEASE
     # a full copy of the tree, minus the build we are about to replace
-    mkdir -p $STAGE
-    tar -c --exclude=.next --exclude=node_modules . | tar -x -C $STAGE
-    ln -s $REMOTE_DIR/node_modules $STAGE/node_modules
-    cd $STAGE
+    mkdir -p \$STAGE
+    tar -c --exclude=.next --exclude=node_modules . | tar -x -C \$STAGE
+    ln -s \$REMOTE_DIR/node_modules \$STAGE/node_modules
+    cd \$STAGE
     /home/zerwizserver/.bun/bin/bun run build
 
     # swap: the rename is the deploy. The old build is kept for a rollback.
-    cd $REMOTE_DIR
+    cd \$REMOTE_DIR
     if [ -d .next ]; then mv .next $RELEASE/.next.previous; fi
-    mv $STAGE/.next .next
-    cp -r $STAGE/public .next/standalone/public 2>/dev/null || true
+    mv \$STAGE/.next .next
+    cp -r \$STAGE/public .next/standalone/public 2>/dev/null || true
     cp -r .next/static .next/standalone/.next/static 2>/dev/null || true
     ln -sfn $RELEASE $REMOTE_CURRENT
   '"
