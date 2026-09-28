@@ -74,17 +74,18 @@ say "  ${DIM}no invented figures in the build${OFF}"
 
 # ---- 4. ship: release directory, then an atomic symlink swap ----------------
 RELEASE="$REMOTE_RELEASES/$(date +%Y%m%d-%H%M%S)"
-step "building in a staging tree, then swapping the directory"
-# WHY THIS SHAPE, after two wrong ones:
-#   1. building over the tree a live process serves from deleted the CSS;
-#   2. shipping to a release directory changed nothing a visitor could see,
-#      because systemd runs the tree.
-# So: the build happens in a FULL COPY of the tree, and only the finished .next
-# is swapped in. The live tree is never written to, and the swap is a rename.
+step "backing up the live build, then building the new one"
+# KISS, after three clever attempts failed. The staging-tree version was
+# "safer" in theory and strictly less reliable in practice: a partial tar copy,
+# a half-swapped directory, and routes that 404'd. The thing that actually
+# protects production is a BACKUP plus a smoke test that fails loudly.
+#
+# So: move the current build aside (a rollback is one mv), build in the tree,
+# and prove it with bin/smoke.sh before anyone sees it.
 ssh "$REMOTE" "set -e
   sudo -u zerwizserver bash -lc '
     set -e
-    cd \$REMOTE_DIR
+    cd $REMOTE_DIR
     git fetch --quiet origin && git reset --hard origin/\$(git rev-parse --abbrev-ref HEAD)
     /home/zerwizserver/.bun/bin/bun install >/dev/null
     if [ -d prisma/migrations ]; then
@@ -92,23 +93,9 @@ ssh "$REMOTE" "set -e
       npx prisma generate >/dev/null
       npx prisma migrate deploy
     fi
-
-    STAGE=$REMOTE_RELEASES/stage
-    rm -rf $RELEASE
-    mkdir -p $RELEASE
-    # a full copy of the tree, minus the build we are about to replace
-    mkdir -p \$STAGE
-    tar -c --exclude=.next --exclude=node_modules . | tar -x -C \$STAGE
-    ln -s \$REMOTE_DIR/node_modules \$STAGE/node_modules
-    cd \$STAGE
-    /home/zerwizserver/.bun/bin/bun run build
-
-    # swap: the rename is the deploy. The old build is kept for a rollback.
-    cd \$REMOTE_DIR
     if [ -d .next ]; then mv .next $RELEASE/.next.previous; fi
-    mv \$STAGE/.next .next
-    cp -r \$STAGE/public .next/standalone/public 2>/dev/null || true
-    cp -r .next/static .next/standalone/.next/static 2>/dev/null || true
+    /home/zerwizserver/.bun/bin/bun run build
+    test -f .next/standalone/server.js || { echo "the build produced no server.js"; exit 1; }
     ln -sfn $RELEASE $REMOTE_CURRENT
   '"
 say "  ${DIM}release: $RELEASE${OFF}"
