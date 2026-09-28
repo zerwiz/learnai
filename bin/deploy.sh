@@ -73,7 +73,7 @@ fi
 say "  ${DIM}no invented figures in the build${OFF}"
 
 # ---- 4. ship: release directory, then an atomic symlink swap ----------------
-RELEASE="$RELEASE_DIR/$(date +%Y%m%d-%H%M%S)"
+RELEASE="$REMOTE_RELEASES/$(date +%Y%m%d-%H%M%S)"
 step "shipping as a release, never over the live tree"
 ssh "$REMOTE" "set -e
   sudo -u zerwizserver bash -lc '
