@@ -93,7 +93,7 @@ ssh "$REMOTE" "set -e
       npx prisma migrate deploy
     fi
 
-    STAGE=$RELEASE/stage
+    STAGE=$REMOTE_RELEASES/stage
     rm -rf $RELEASE
     mkdir -p $RELEASE
     # a full copy of the tree, minus the build we are about to replace
