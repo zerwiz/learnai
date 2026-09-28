@@ -1,0 +1,26 @@
+name: I am stuck
+description: Ask a question and get unstuck.
+title: "[help] "
+labels: ["question"]
+body: |
+  ## What I was doing
+  <!-- the lesson, the track, the step -->
+
+  ## The exact command
+  ```bash
+  # paste it, exactly as you ran it
+  ```
+
+  ## The exact error
+  ```
+  paste the whole error text — not a paraphrase
+  ```
+
+  ## What I expected, and what happened instead
+
+  ## My machine
+  - OS: <!-- e.g. Omarchy, Ubuntu, Mac -->
+  - GPU: <!-- e.g. RTX A5000, Intel UHD, none -->
+
+  _The exact command and the exact error are usually the whole answer. Never
+  redact them, and never describe them from memory._

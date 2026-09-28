@@ -1,0 +1,24 @@
+name: What I built
+description: Show the thing you made.
+title: "[shipped] "
+labels: ["show-and-tell"]
+body: |
+  ## What it is
+  <!-- one sentence -->
+
+  ## What it does
+  <!-- what it actually does when you run it -->
+
+  ## The stack
+
+  ## What it taught me
+  <!-- the part that surprised you -->
+
+  ## Where it lives
+  <!-- repo or link, if you want to share it -->
+
+  ## Which course
+  <!-- track and lesson, if one led you here -->
+
+  _Finished something, or half-finished it — both count. Half-finished with an
+  honest account of where you got stuck is worth more than a polished demo._
