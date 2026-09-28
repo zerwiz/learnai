@@ -93,6 +93,7 @@ ssh "$REMOTE" "set -e
       npx prisma generate >/dev/null
       npx prisma migrate deploy
     fi
+    mkdir -p $RELEASE
     if [ -d .next ]; then mv .next $RELEASE/.next.previous; fi
     /home/zerwizserver/.bun/bin/bun run build
     test -f .next/standalone/server.js || { echo "the build produced no server.js"; exit 1; }
