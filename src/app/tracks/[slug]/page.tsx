@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, BookOpen, Clock, Lock } from "lucide-react";
-import { getTrack, orderedTracks } from "@/lib/course-data";
+import { orderedTracks } from "@/lib/course-data";
 import { StaticHeader } from "./static-header"
 import { SiteFooter } from "@/components/learnai/site-footer"
 
@@ -23,7 +23,12 @@ export function generateStaticParams() {
 
 export default async function TrackPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const track = getTrack(slug);
+  // getTrack() looks a track up by ID (t0, t6, ...). This page is addressed by
+  // SLUG, which is what every link in the other repo uses - so it looks up the
+  // slug explicitly. Passing a slug to getTrack() returned undefined, and every
+  // /tracks/<slug> page rendered notFound() at build time. The .meta file said
+  // status 404 the whole time.
+  const track = orderedTracks.find((t) => t.slug === slug);
   if (!track) notFound();
 
   const freeLessons = track.lessons.filter((l) => l.access === "free");
