@@ -1,0 +1,148 @@
+#!/usr/bin/env bash
+# pre-commit — the rules, enforced where a mistake is still cheap.
+#
+# Every check below cites the rule it comes from. A guard that cannot explain
+# itself is a guard people disable, and a guard people disable is decoration.
+#
+# Overrides exist for genuine emergencies and are named, loud, and temporary:
+#   AIGF_SKIP_BRANCH=1   AIGF_SKIP_SECRETS=1   AIGF_SKIP_TRUTH=1
+# The first two are the two that protect other people; the third is the one that
+# protects the site. None of them is a default.
+set -uo pipefail
+
+BOLD=$'\033[1m'; RED=$'\033[31m'; YEL=$'\033[33m'; GRN=$'\033[32m'; OFF=$'\033[0m'
+say()  { printf '%s\n' "$*"; }
+refuse() { printf '%s  REFUSED: %s%s\n' "$RED" "$1" "$OFF" >&2; }
+FAIL=0
+
+BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+MERGING="no"; [ -f "$(git rev-parse --git-dir)/MERGE_HEAD" ] && MERGING="yes"
+
+# ---------------------------------------------------------------------------
+# RULES/06-deploy-branches.md — work lands on a named branch, not on main.
+#
+# A merge into main is allowed (that is how main receives work). An ordinary
+# commit straight onto main is not: it skips the PR, and the PR is the only
+# place a human ever sees the change before it can be promoted.
+# ---------------------------------------------------------------------------
+if [ "${AIGF_SKIP_BRANCH:-0}" != "1" ] && [ "$BRANCH" = "main" ] && [ "$MERGING" = "no" ]; then
+  case "$(git diff --cached --name-only | head -1)" in
+    RULES/*|plans/*|AGENTS.md|CHANGELOG.md) ;;   # records may be appended in place
+    *)
+      refuse "a plain commit on main (RULES/06).
+  Work lands on feature/* or bugfix/* and reaches main by merge or PR.
+  Records — RULES/, plans/, AGENTS.md, CHANGELOG.md — may be appended on main.
+  To override deliberately:  AIGF_SKIP_BRANCH=1 git commit ..."
+      FAIL=1 ;;
+  esac
+fi
+
+case "$BRANCH" in
+  main|validated|master|develop) ;;
+  feature/*|bugfix/*|fix/*|feat/*|hotfix/*) ;;
+  *)
+    if [ "$BRANCH" != "HEAD" ]; then
+      refuse "branch name '$BRANCH' tells no one what it is (RULES/06).
+  Use feature/<what-it-does>, bugfix/<what-it-fixes>, or one of the four
+  permanent names: main, validated, master, develop."
+      FAIL=1
+    fi ;;
+esac
+
+# ---------------------------------------------------------------------------
+# THE FIRST LAW — a secret never enters this repository, and never its history.
+#
+# Scoped to what is STAGED, so it cannot be silenced by staging less, and it is
+# pattern-based so it needs no allowlist to maintain.
+# ---------------------------------------------------------------------------
+if [ "${AIGF_SKIP_SECRETS:-0}" != "1" ]; then
+  STAGED="$(git diff --cached --name-only --diff-filter=ACMR)"
+  # Files that ARE credentials. A .env or a database is a secret by being present.
+  BAD_FILES="$(printf '%s\n' "$STAGED" | grep -iE '(^|/)\.env($|\.)|(^|/)custom\.db$|\.pem$|\.key$|id_rsa|platform\.env$' || true)"
+  if [ -n "$BAD_FILES" ]; then
+    refuse "a credential file is staged:
+$(printf '%s\n' "$BAD_FILES" | sed 's/^/    /')
+  Secrets belong in \$YMIR_HOME/hodd/secrets, by reference only.
+  To override deliberately:  AIGF_SKIP_SECRETS=1 git commit ..."
+    FAIL=1
+  fi
+
+  # Values, not filenames.
+  if git diff --cached -U0 | grep -niE '^\+.*(api[_-]?key|secret|password|passwd|token|private[_-]?key)[[:space:]]*[:=][[:space:]]*["'"'"']?[A-Za-z0-9/+_.-]{12,}' >/dev/null 2>&1; then
+    refuse "a staged line looks like it assigns a credential (THE FIRST LAW).
+  Secrets are referenced by path, never inlined. If this is a placeholder, name
+  it like one:  YOUR_TOKEN_HERE
+  To override deliberately:  AIGF_SKIP_SECRETS=1 git commit ..."
+    FAIL=1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# RULES/01-truth.md — a number on this site may only be a count we can query.
+#
+# The blog is exempt, and only the blog: a post may have to NAME the figures it
+# exists to explain. Everything in src/ is guarded.
+# ---------------------------------------------------------------------------
+if [ "${AIGF_SKIP_TRUTH:-0}" != "1" ]; then
+  TRUTH_HITS="$(git diff --cached -U0 -- src/ \
+    | grep -nE '^\+.*(1,284|2,140|28m avg|CRS-100)' \
+    | grep -vE 'content/blog|plans/|docs/' || true)"
+  if [ -n "$TRUTH_HITS" ]; then
+    refuse "an invented figure was staged into src/ (RULES/01).
+$(printf '%s\n' "$TRUTH_HITS" | head -3 | sed 's/^/    /')
+  A number may only be a count of rows we can query. The blog may name these
+  figures; the code may not contain them.
+  To override deliberately:  AIGF_SKIP_TRUTH=1 git commit ..."
+    FAIL=1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# A schema change ships WITH its migration, and the policy declares the columns.
+#
+# The privacy guard has caught this five times already and was right five times.
+# A new personal column with no /privacy entry is a policy that has stopped
+# describing the thing it governs.
+# ---------------------------------------------------------------------------
+if git diff --cached --name-only | grep -q '^prisma/schema\.prisma$'; then
+  if [ "${AIGF_SKIP_PRIVACY:-0}" != "1" ] && [ -f scripts/privacy-check.mjs ]; then
+    if ! node scripts/privacy-check.mjs >/dev/null 2>&1; then
+      refuse "the schema grew and /privacy did not follow.
+$(node scripts/privacy-check.mjs 2>&1 | grep -E '^\s+[0-9]+\.' | head -4 | sed 's/^/    /')
+  Declare it in src/lib/privacy-inventory.json before you commit, not after
+  the guard catches you in CI."
+      FAIL=1
+    fi
+  fi
+  if ! git diff --cached --name-only | grep -q '^prisma/migrations/'; then
+    refuse "prisma/schema.prisma changed but no migration is staged.
+  A schema that is behind an app is a 500 waiting to happen. Run:
+    npx prisma migrate dev --name <what-changed>
+  and commit the migration with the schema."
+    FAIL=1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# RULES/06 — you may not push to `validated` anything that is not on `main`.
+#
+# The promotion path is main -> validated. A commit that reaches `validated`
+# without passing through `main` has skipped the gate, and the gate is the only
+# reason the server trusts `validated`.
+# ---------------------------------------------------------------------------
+if [ "$BRANCH" = "validated" ] && [ "${AIGF_SKIP_PROMOTION:-0}" != "1" ]; then
+  if ! git fetch --quiet origin 2>/dev/null; then :; fi
+  if git rev-parse --verify origin/main >/dev/null 2>&1; then
+    if ! git merge-base --is-ancestor HEAD origin/main 2>/dev/null; then
+      refuse "this commit is on validated but NOT on origin/main (RULES/06).
+  The only road to validated runs through main. Land it on main first, then:
+    bash bin/promote-to-validated.sh"
+      FAIL=1
+    fi
+  fi
+fi
+
+[ "$FAIL" = "0" ] && exit 0
+say ""
+say "${YEL}Nothing was committed. Fix the above, or override deliberately.${OFF}"
+exit 1
